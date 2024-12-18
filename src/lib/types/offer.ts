@@ -1,3 +1,5 @@
+import { Offer } from "@prisma/client"
+
 export type AddOfferErrors = {
     success: boolean,
     errors: {
@@ -16,3 +18,5 @@ export type DeleteOfferErrors = {
     success: boolean,
     error: string | null
 }
+
+export type OfferFrom = Omit<Offer, 'id' | 'dateAdded' | 'dateUpdated' | 'userId' | 'status' | 'user' | 'userId' | 'resume'>

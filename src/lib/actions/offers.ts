@@ -1,12 +1,21 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { AddOfferErrors, DeleteOfferErrors } from '@/lib/types'
+import { AddOfferErrors, DeleteOfferErrors } from '@/lib/types/offer'
 import { Offer, OfferStatus } from '@prisma/client'
 import { z } from 'zod'
+import { getUserId } from './auth'
 
 export const getOffers = async () => {
-    const offers = await prisma.offer.findMany()    
+    const userId = await getUserId()
+    if (!userId) {
+        return []
+    }
+    const offers = await prisma.offer.findMany({
+        where: {
+            userId: userId
+        }
+    })    
     const columns = [
         {
             id: OfferStatus.TODO,
@@ -55,6 +64,10 @@ const addOfferSchema = z.object({
 })
 
 export const addOffer = async (prevState: AddOfferErrors, offer: z.infer<typeof addOfferSchema>) => {
+    const userId = await getUserId()
+    if (!userId) {
+        return { success: false, errors: 'Unauthorized' }
+    }
     const parsedOffer = addOfferSchema.safeParse(offer)
 
     if(!parsedOffer.success){
@@ -73,12 +86,12 @@ export const addOffer = async (prevState: AddOfferErrors, offer: z.infer<typeof 
                 location,
                 resumeId,
                 status: OfferStatus.TODO,
-                userId: 1
+                userId: userId
             }
         })
         return { success: true, errors: null }
     } catch (error) {
-        return { success: false, errors: null }
+        return { success: false, errors: 'Error adding offer' }
     }
 }
 

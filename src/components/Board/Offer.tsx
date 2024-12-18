@@ -4,9 +4,10 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { useState, useEffect } from 'react'
 import { Offer as OfferType } from '@prisma/client'
-import { getOffer } from '@/app/actions/singleOffer'
+import { getOffer } from '@/lib/actions/singleOffer'
 import { toast } from 'react-hot-toast'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import Slate from 'slate'
 
 const Offer = () => {
     const [open, setOpen] = useState(false)

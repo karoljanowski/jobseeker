@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Offer } from '@prisma/client'
 import { Button } from '../ui/button'
 import { Trash2Icon, ClockIcon, Loader2 } from 'lucide-react'
-import { deleteOffer } from '@/app/actions/offers'
+import { deleteOffer } from '@/lib/actions/offers'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { toast } from 'react-hot-toast'
@@ -72,7 +72,8 @@ const DeleteOffer = ({ id, setIsDeleting }: { id: number, setIsDeleting: (isDele
     }
   }, [state.success, state.error])
 
-  const handleDelete = () => {
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
     startTransition(() => {
       setIsDeleting(true)
       dispatch(id)

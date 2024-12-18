@@ -3,10 +3,22 @@
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { BookmarkCheckIcon, SearchIcon, FileIcon, SettingsIcon, LogOutIcon } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { logout } from "@/lib/actions/auth"
+import { toast } from "react-hot-toast"
 
 const Menu = () => {
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        const response = await logout()
+        if (response.success) {
+            router.push('/login')
+            toast.success('Logged out successfully')
+        }
+    }
+
     return (
         <div className="flex flex-col gap-1 h-full bg-neutral-950 backdrop-blur-xl rounded-xl p-4 sticky top-4">
             <div className="mb-8 mt-4">
@@ -14,10 +26,16 @@ const Menu = () => {
                 <p className="text-sm text-neutral-400">Manage your offers</p>
             </div>
             <MenuItem title="Board" icon={<BookmarkCheckIcon className="w-5 h-5" />} href="/dashboard" />
-            <MenuItem title="Offers" icon={<SearchIcon className="w-5 h-5" />} href="/offers" />
-            <MenuItem title="Files" icon={<FileIcon className="w-5 h-5" />} href="/files" />
+            <MenuItem title="Files" icon={<FileIcon className="w-5 h-5" />} href="/dashboard/files" />
             <MenuItem title="Settings" icon={<SettingsIcon className="w-5 h-5" />} href="/settings" />
-            <MenuItem className="mt-auto" title="Logout" icon={<LogOutIcon className="w-5 h-5" />} href="/logout" />
+            <Button 
+                variant="destructive" 
+                className="mt-auto gap-3" 
+                onClick={handleLogout}
+            >
+                <LogOutIcon className="w-5 h-5" />
+                Logout
+            </Button>
         </div>
     )
 }

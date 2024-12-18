@@ -1,11 +1,9 @@
-import AddOffer from '@/components/Board/AddOffer';
+import AddOffer from '@/components/Board/AddOffer/AddOffer';
 import Board from '@/components/Board/Board';
-import { getOffers } from '../actions/offers';
+import { getOffers } from '../../lib/actions/offers';
 import { Suspense } from 'react';
 import Offer from '@/components/Board/Offer';
 import { BookmarkCheckIcon } from 'lucide-react';
-
-export const revalidate = 0;
 
 const DashboardPage = async () => {
     return (

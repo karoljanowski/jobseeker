@@ -4,7 +4,7 @@ import React, { useState, useEffect, useOptimistic, startTransition } from 'reac
 import { DndContext, closestCorners, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core'
 import { Draggable } from './Draggable'
 import { Droppable } from './Droppable'
-import { updateOfferStatus } from '@/app/actions/offers'
+import { updateOfferStatus } from '@/lib/actions/offers'
 import { Offer, OfferStatus } from '@prisma/client'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { AnimatePresence } from 'framer-motion'
