@@ -15,11 +15,9 @@ const initialForm: OfferFrom = {
     position: '',
     description: '',
     expiresAt: new Date(new Date().setDate(new Date().getDate() + 7)),
-    priority: 1,
     source: '',
     resumeId: null,
     location: '',
-    notes: '',
     requirements: '',
 }
 
@@ -43,15 +41,12 @@ const AddOffer = () => {
         setForm({ ...form, [e.target.name]: e.target.value })
     }
 
-    const handleSelectChange = (value: string) => {
-        setForm({ ...form, priority: parseInt(value) })
-    }
-
     useEffect(() => {
         if(state.success){
             toast.success('Offer added successfully')
             setOpen(false)
         }else if(state.errors){
+            console.log(state.errors)
             toast.error('Error adding offer')
         }
     }, [state])
@@ -75,7 +70,7 @@ const AddOffer = () => {
                     <DialogTitle>Add new offer</DialogTitle>
                     <DialogDescription>Add a new offer to the board</DialogDescription>
                 </DialogHeader>
-                <AddOfferForm form={form} setForm={setForm} errors={state.errors} handleDateChange={handleDateChange} handleInputChange={handleInputChange} handleSelectChange={handleSelectChange} />
+                <AddOfferForm form={form} setForm={setForm} errors={state.errors} handleDateChange={handleDateChange} handleInputChange={handleInputChange} />
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button className='h-8' variant="destructive">Cancel</Button>

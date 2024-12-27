@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { AddOfferErrors, DeleteOfferErrors } from '@/lib/types/offer'
+import { AddOfferForm, DeleteOfferForm, OfferFrom } from '@/lib/types/offer'
 import { Offer, OfferStatus } from '@prisma/client'
 import { z } from 'zod'
 import { getUserId } from './auth'
@@ -18,9 +18,9 @@ export const getOffers = async () => {
     })    
     const columns = [
         {
-            id: OfferStatus.TODO,
-            title: 'To Do',
-            offers: offers.filter(offer => offer.status === OfferStatus.TODO)
+            id: OfferStatus.OPEN,
+            title: 'Open',
+            offers: offers.filter(offer => offer.status === OfferStatus.OPEN)
         },
         {
             id: OfferStatus.SENDED,
@@ -37,7 +37,7 @@ export const getOffers = async () => {
     return columns
 }
 
-export const deleteOffer = async (prevState: DeleteOfferErrors, offerId: number) => {
+export const deleteOffer = async (prevState: DeleteOfferForm, offerId: number) => {
     try {   
         await prisma.offer.delete({
             where: {
@@ -55,25 +55,23 @@ const addOfferSchema = z.object({
     position: z.string().refine(value => value.length > 0, { message: 'Position is required' }),
     description: z.string().refine(value => value.length > 0, { message: 'Description is required' }),
     expiresAt: z.date().refine(value => value.getTime() > Date.now(), { message: 'Expires at must be in the future' }),
-    priority: z.number().min(1).refine(value => value > 0, { message: 'Priority must be greater than 0' }),
     source: z.string().refine(value => value.length > 0, { message: 'Source is required' }),
     location: z.string().refine(value => value.length > 0, { message: 'Location is required' }),
     resumeId: z.number().nullable(),
-    notes: z.string().nullable(),
     requirements: z.string().nullable()
 })
 
-export const addOffer = async (prevState: AddOfferErrors, offer: z.infer<typeof addOfferSchema>) => {
+export const addOffer = async (prevState: AddOfferForm, offer: OfferFrom) => {
     const userId = await getUserId()
     if (!userId) {
-        return { success: false, errors: 'Unauthorized' }
+        return { success: false, errors: { other: 'Unauthorized' } }
     }
     const parsedOffer = addOfferSchema.safeParse(offer)
 
     if(!parsedOffer.success){
         return { success: false, errors: parsedOffer.error.flatten().fieldErrors }
     }
-    const { company, position, description, expiresAt, priority, source, location, resumeId } = parsedOffer.data
+    const { company, position, description, expiresAt, source, location, resumeId } = parsedOffer.data
     try {
         await prisma.offer.create({
             data: {
@@ -81,17 +79,16 @@ export const addOffer = async (prevState: AddOfferErrors, offer: z.infer<typeof 
                 position,
                 description,
                 expiresAt,
-                priority,
                 source,
                 location,
                 resumeId,
-                status: OfferStatus.TODO,
                 userId: userId
             }
         })
         return { success: true, errors: null }
     } catch (error) {
-        return { success: false, errors: 'Error adding offer' }
+        console.error(error)
+        return { success: false, errors: { other: 'Error adding offer' } }
     }
 }
 

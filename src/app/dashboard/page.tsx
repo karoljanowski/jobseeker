@@ -2,7 +2,7 @@ import AddOffer from '@/components/Board/AddOffer/AddOffer';
 import Board from '@/components/Board/Board';
 import { getOffers } from '../../lib/actions/offers';
 import { Suspense } from 'react';
-import Offer from '@/components/Board/Offer';
+import OfferDialog from '@/components/Board/Offer/OfferDialog';
 import { BookmarkCheckIcon } from 'lucide-react';
 
 const DashboardPage = async () => {
@@ -18,7 +18,7 @@ const DashboardPage = async () => {
             <Suspense fallback={<div>Loading...</div>}>
                 <BoardWrapper />
             </Suspense>
-            <Offer/>
+            <OfferDialog />
         </div>
     );
 }

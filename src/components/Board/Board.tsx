@@ -10,7 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
 
-
 type Column = {
     id: string
     title: string
@@ -19,8 +18,8 @@ type Column = {
 
 const initialColumns: Column[] = [
     {
-        id: OfferStatus.TODO,
-        title: 'To Do',
+        id: OfferStatus.OPEN,
+        title: 'Open',
         offers: []
     },
     {
@@ -49,8 +48,6 @@ const Board = ({ offers }: { offers: Column[] }) => {
     useEffect(() => {
         setColumns(offers)
     }, [offers])
-
-
 
     const handleDragEnd = async (event: DragEndEvent) => {
         const { active, over } = event

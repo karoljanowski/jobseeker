@@ -13,12 +13,11 @@ interface AddOfferFormProps {
     form: OfferFrom
     setForm: Dispatch<SetStateAction<OfferFrom>>
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
-    handleSelectChange: (value: string) => void,
     handleDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     errors: AddOfferErrors['errors']
 }
 
-const AddOfferForm = ({ form, setForm, handleInputChange, handleSelectChange, handleDateChange, errors }: AddOfferFormProps) => {
+const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, errors }: AddOfferFormProps) => {
     return (
         <div className='grid grid-cols-2 gap-4'>
             <GetFromLink setForm={setForm} />
@@ -38,18 +37,8 @@ const AddOfferForm = ({ form, setForm, handleInputChange, handleSelectChange, ha
                 {errors?.expiresAt && <p className='text-red-500 text-xs'>{errors.expiresAt.join(', ')}</p>}
             </div>
             <div className='flex flex-col gap-2'>
-                <Label htmlFor='priority'>Priority</Label>
-                <Select onValueChange={handleSelectChange} value={form.priority.toString()}>
-                    <SelectTrigger className='bg-neutral-900 border-neutral-800'>
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className='bg-neutral-950 border-neutral-900 text-white'>
-                        <SelectItem value='1'>Low</SelectItem>
-                        <SelectItem value='2'>Medium</SelectItem>
-                        <SelectItem value='3'>High</SelectItem>
-                    </SelectContent>
-                </Select>
-                {errors?.priority && <p className='text-red-500 text-xs'>{errors.priority.join(', ')}</p>}
+                <Label htmlFor='resume'>Resume</Label>
+                <ResumeSelect />
             </div>
             <div className='flex flex-col gap-2 col-span-2'>
                 <Label htmlFor='requirements'>Requirements</Label>
@@ -72,21 +61,6 @@ const AddOfferForm = ({ form, setForm, handleInputChange, handleSelectChange, ha
                 />
                 {errors?.description && <p className='text-red-500 text-xs'>{errors.description.join(', ')}</p>}
             </div>
-            <div className='flex flex-col gap-2'>
-                <Label htmlFor='resume'>Resume</Label>
-                <ResumeSelect />
-            </div>
-            <div className='flex flex-col gap-2 col-span-2'>
-                <Label htmlFor='notes'>Notes</Label>
-                <Textarea 
-                    value={form.notes || ''} 
-                    name='notes' 
-                    onChange={handleInputChange} 
-                    className='bg-neutral-950 border-neutral-900' 
-                    placeholder='for example: interview was on 12/12/2024 at 10:00' 
-                />
-            </div>
-
         </div>
     )
 }

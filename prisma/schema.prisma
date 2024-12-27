@@ -9,7 +9,7 @@ datasource db {
 
 model Offer {
   id           Int         @id @default(autoincrement())
-  status       OfferStatus @default(TODO)
+  status       OfferStatus @default(OPEN)
   source       String
   resumeId     Int?
   resume       Files?      @relation(fields: [resumeId], references: [id])
@@ -20,8 +20,8 @@ model Offer {
   dateAdded    DateTime    @default(now())
   dateUpdated  DateTime    @updatedAt
   expiresAt    DateTime
-  priority     Int         @default(0)
-  notes        String?
+  tags         String[]
+  notes        Note[]
   requirements String?
   user         User        @relation(fields: [userId], references: [id])
   userId       Int
@@ -44,8 +44,18 @@ model User {
 }
 
 enum OfferStatus {
-  TODO
+  OPEN
   SENDED
   PROCESSING
   FINISHED
+}
+
+model Note {
+    id        String   @id @default(cuid())
+    content   String
+    createdAt DateTime @default(now())
+    offer     Offer    @relation(fields: [offerId], references: [id])
+    offerId   Int
+
+    @@index([offerId])
 }
