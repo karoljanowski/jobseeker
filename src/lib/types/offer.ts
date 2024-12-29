@@ -1,6 +1,6 @@
-import { Offer, Note } from "@prisma/client"
+import { Offer, Note, File } from "@prisma/client"
 
-export type AddOfferForm = {
+export type AddOfferFormType = {
     success: boolean,
     errors: {
         company?: string[],
@@ -10,18 +10,19 @@ export type AddOfferForm = {
         priority?: string[],
         source?: string[],
         location?: string[],
-        resumeId?: string[],
+        fileId?: string[],
         other?: string
     } | null
 }
 
-export type DeleteOfferForm = {
+export type DeleteOfferFormType = {
     success: boolean,
     error: string | null
 }
 
 export type OfferWithNotes = Offer & {
     notes: Note[]
+    file: File | null
 }
 
 export type OfferFrom = Omit<Offer, 'id' | 'dateAdded' | 'dateUpdated' | 'userId' | 'status' | 'user' | 'userId' | 'resume' | 'notes' | 'tags'>

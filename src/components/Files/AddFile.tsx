@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { FileIcon, Loader2, Upload } from "lucide-react";
 import { startTransition, useActionState, useEffect, useRef, useState } from "react";
-import { uploadFile } from "@/lib/actions/upload";
+import { uploadFile } from "@/lib/actions/files";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 

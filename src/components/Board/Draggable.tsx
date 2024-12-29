@@ -36,9 +36,9 @@ export function Draggable({ id, offer }: { id: number, offer: Offer }) {
           scale: 1
         }}
     >
-        <Card onClick={handleClick} ref={setNodeRef} style={style} className="bg-neutral-900 border-none text-white cursor-move" {...listeners} {...attributes}>
+        <Card onClick={handleClick} ref={setNodeRef} style={style} className="border-none bg-neutral-900 text-white cursor-move rounded-lg" {...listeners} {...attributes}>
             <CardHeader>
-                <CardTitle className="flex justify-between items-center">
+                <CardTitle className="flex justify-between items-start">
                     <span>{offer.company}</span>
                     <span className="text-xs text-neutral-500 flex items-center gap-1">
                         <ClockIcon className="w-4 h-4" />
@@ -49,42 +49,8 @@ export function Draggable({ id, offer }: { id: number, offer: Offer }) {
                     {offer.position}
                 </CardDescription>
             </CardHeader>
-            <CardFooter>
-                <DeleteOffer id={id} setIsDeleting={setIsDeleting} />
-            </CardFooter>
         </Card>
     </motion.div>
-  )
-}
-
-const DeleteOffer = ({ id, setIsDeleting }: { id: number, setIsDeleting: (isDeleting: boolean) => void }) => {
-  const router = useRouter()
-  const [state, dispatch, isPending] = useActionState(deleteOffer, {
-    success: false,
-    error: null
-  })
-
-  useEffect(() => {
-    if(state.success){
-      toast.success('Offer deleted successfully')
-    }else if(state.error){
-      toast.error(state.error)
-    }
-  }, [state.success, state.error])
-
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-    startTransition(() => {
-      setIsDeleting(true)
-      dispatch(id)
-      router.refresh()
-    })
-  }
-
-  return (
-    <button onClick={handleDelete}>
-      {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2Icon className="w-4 h-4 text-red-950 hover:text-red-500 transition-colors cursor-pointer" />}
-    </button>
   )
 }
 

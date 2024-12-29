@@ -11,8 +11,8 @@ model Offer {
   id           Int         @id @default(autoincrement())
   status       OfferStatus @default(OPEN)
   source       String
-  resumeId     Int?
-  resume       Files?      @relation(fields: [resumeId], references: [id])
+  fileId       Int?
+  file         File?      @relation(fields: [fileId], references: [id])
   company      String
   position     String
   description  String
@@ -27,12 +27,18 @@ model Offer {
   userId       Int
 }
 
-model Files {
-  id     Int     @id @default(autoincrement())
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int
-  file   String
-  Offer  Offer[]
+model File {
+  id           Int     @id @default(autoincrement())
+  user         User    @relation(fields: [userId], references: [id])
+  userId       Int
+  publicId     String  @unique
+  assetId      String
+  format       String
+  createdAt    DateTime
+  bytes        Int
+  fileUrl      String
+  thumbnail    String
+  Offer        Offer[]
 }
 
 model User {
@@ -40,7 +46,7 @@ model User {
   email    String  @unique
   password String
   offers   Offer[]
-  files    Files[]
+  files  File[]
 }
 
 enum OfferStatus {

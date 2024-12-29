@@ -1,8 +1,8 @@
 'use client'
 import { startTransition, useActionState, useEffect, useState } from 'react'
-import { Button } from '../../ui/button'
+import { Button } from '../../../ui/button'
 import { Loader2, PlusIcon } from 'lucide-react'
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../../ui/dialog'
 import { addOffer } from '@/lib/actions/offers'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -16,7 +16,7 @@ const initialForm: OfferFrom = {
     description: '',
     expiresAt: new Date(new Date().setDate(new Date().getDate() + 7)),
     source: '',
-    resumeId: null,
+    fileId: null,
     location: '',
     requirements: '',
 }

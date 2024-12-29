@@ -3,28 +3,26 @@ import { FileIcon, Loader2 } from "lucide-react";
 import Files from "@/components/Files/Files";
 import { getFiles } from "@/lib/actions/files";
 import { Suspense } from "react";
+import Loader from "@/components/Loader";
 
 const FilesPage = () => {
     return (
         <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold flex items-center gap-2">
-                    <FileIcon className="w-5 h-5" />
-                    Files
-                </h1>
+                <div>
+                    <h1 className="text-2xl font-bold flex items-center gap-2">
+                        <FileIcon className="w-5 h-5" />
+                        Files
+                    </h1>
+                    <p className="text-sm text-neutral-400">
+                        Manage your files
+                    </p>
+                </div>
                 <AddFile />
             </div>
-            <div className="">
-                <Suspense
-                    fallback={
-                        <div className="p-8 flex justify-center">
-                            <Loader2 className="w-6 h-6 animate-spin" />
-                        </div>
-                    }
-                >
-                    <FilesWrapper />
-                </Suspense>
-            </div>
+            <Suspense fallback={<Loader />}>
+                <FilesWrapper />
+            </Suspense>
         </div>
     );
 }
@@ -35,8 +33,8 @@ const FilesWrapper = async () => {
         return <Files files={files.files} />
     }
     return (
-        <div className="p-8 text-center text-muted-foreground">
-            Error loading files
+        <div className="p-8 text-center">
+            {files.error}
         </div>
     )
 }

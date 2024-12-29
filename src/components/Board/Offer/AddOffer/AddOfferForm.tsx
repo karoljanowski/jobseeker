@@ -4,9 +4,9 @@ import { OfferFrom } from "@/lib/types/offer"
 import { Dispatch, SetStateAction } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import ResumeSelect from "./ResumeSelect"
+import ResumeSelect from "../ResumeSelect"
 import GetFromLink from "./GetFromLink"
-import { AddOfferErrors } from "@/lib/types/offer"
+import { AddOfferFormType } from "@/lib/types/offer"
 import LabelInput from "@/components/ui/labelInput"
 
 interface AddOfferFormProps {
@@ -14,13 +14,14 @@ interface AddOfferFormProps {
     setForm: Dispatch<SetStateAction<OfferFrom>>
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
     handleDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    errors: AddOfferErrors['errors']
+    errors: AddOfferFormType['errors']
 }
 
 const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, errors }: AddOfferFormProps) => {
     return (
         <div className='grid grid-cols-2 gap-4'>
             <GetFromLink setForm={setForm} />
+            <LabelInput label='Company' placeholder='for example: Google' type='text' required name='company' value={form.company} onChange={handleInputChange} errors={errors?.company} />
             <LabelInput label='Position' placeholder='for example: Software Engineer' type='text' required name='position' value={form.position} onChange={handleInputChange} errors={errors?.position} />
             <LabelInput label='Source' placeholder='for example: LinkedIn' type='text' required name='source' value={form.source} onChange={handleInputChange} errors={errors?.source} />
             <LabelInput label='Location' placeholder='for example: Remote' type='text' required name='location' value={form.location} onChange={handleInputChange} errors={errors?.location} />
@@ -37,8 +38,8 @@ const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, erro
                 {errors?.expiresAt && <p className='text-red-500 text-xs'>{errors.expiresAt.join(', ')}</p>}
             </div>
             <div className='flex flex-col gap-2'>
-                <Label htmlFor='resume'>Resume</Label>
-                <ResumeSelect />
+                <Label htmlFor='fileId'>File</Label>
+
             </div>
             <div className='flex flex-col gap-2 col-span-2'>
                 <Label htmlFor='requirements'>Requirements</Label>

@@ -100,14 +100,14 @@ const Board = ({ offers }: { offers: Column[] }) => {
 
     return (
         <DndContext id="board" sensors={sensors} collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
-            <div className="grid grid-cols-3 gap-4 w-full">
+            <div className="grid grid-cols-3 gap-4 w-full h-full">
                 {optimisticColumns.map((column) => (
                     <Droppable key={column.id} id={column.id}>
-                        <Card className="bg-neutral-950 border-none">
-                            <CardHeader>
+                        <Card className="bg-neutral-950 border-none h-full">
+                            <CardHeader className="px-5 pt-5 pb-1">
                                 <CardTitle>{column.title}</CardTitle>
                             </CardHeader>
-                            <CardContent className='flex flex-col gap-2'>
+                            <CardContent className='flex flex-col gap-2 p-3 h-full'>
                                 <AnimatePresence mode="popLayout">
                                     {column.offers.map((offer) => (
                                         <Draggable key={offer.id} id={offer.id} offer={offer} />

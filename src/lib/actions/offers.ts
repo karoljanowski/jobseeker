@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { AddOfferForm, DeleteOfferForm, OfferFrom } from '@/lib/types/offer'
+import { AddOfferFormType, DeleteOfferFormType, OfferFrom } from '@/lib/types/offer'
 import { Offer, OfferStatus } from '@prisma/client'
 import { z } from 'zod'
 import { getUserId } from './auth'
@@ -37,7 +37,7 @@ export const getOffers = async () => {
     return columns
 }
 
-export const deleteOffer = async (prevState: DeleteOfferForm, offerId: number) => {
+export const deleteOffer = async (prevState: DeleteOfferFormType, offerId: number) => {
     try {   
         await prisma.offer.delete({
             where: {
@@ -57,11 +57,11 @@ const addOfferSchema = z.object({
     expiresAt: z.date().refine(value => value.getTime() > Date.now(), { message: 'Expires at must be in the future' }),
     source: z.string().refine(value => value.length > 0, { message: 'Source is required' }),
     location: z.string().refine(value => value.length > 0, { message: 'Location is required' }),
-    resumeId: z.number().nullable(),
+    fileId: z.number().nullable().optional(),
     requirements: z.string().nullable()
 })
 
-export const addOffer = async (prevState: AddOfferForm, offer: OfferFrom) => {
+export const addOffer = async (prevState: AddOfferFormType, offer: OfferFrom) => {
     const userId = await getUserId()
     if (!userId) {
         return { success: false, errors: { other: 'Unauthorized' } }
@@ -71,7 +71,7 @@ export const addOffer = async (prevState: AddOfferForm, offer: OfferFrom) => {
     if(!parsedOffer.success){
         return { success: false, errors: parsedOffer.error.flatten().fieldErrors }
     }
-    const { company, position, description, expiresAt, source, location, resumeId } = parsedOffer.data
+    const { company, position, description, expiresAt, source, location, fileId, requirements } = parsedOffer.data
     try {
         await prisma.offer.create({
             data: {
@@ -81,7 +81,8 @@ export const addOffer = async (prevState: AddOfferForm, offer: OfferFrom) => {
                 expiresAt,
                 source,
                 location,
-                resumeId,
+                fileId,
+                requirements,
                 userId: userId
             }
         })
