@@ -7,6 +7,9 @@ import { SignJWT, decodeJwt, jwtVerify } from "jose"
 import { cookies } from "next/headers"
 import { LoginState, RegisterState } from "../types/auth"
 
+const TOKEN_EXPIRATION = '7d' // 7 days
+const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 // 7 days in seconds
+
 const loginSchema = z.object({
     email: z.string().refine((email) => email.includes('@'), {
         message: "Invalid email or password",
@@ -38,14 +41,14 @@ export const login = async (state: LoginState, formData: FormData) => {
 
     const token = await new SignJWT({ id: user.id })
         .setProtectedHeader({ alg: 'HS256' })
-        .setExpirationTime('1h')
+        .setExpirationTime(TOKEN_EXPIRATION)
         .sign(new TextEncoder().encode(process.env.JWT_SECRET_KEY))
 
     const cookieStore = await cookies()
     cookieStore.set('token', token, {
         httpOnly: true, 
         secure: process.env.NODE_ENV === 'production',
-        maxAge: 3600
+        maxAge: COOKIE_MAX_AGE
     })
 
     return { success: true, errors: null }

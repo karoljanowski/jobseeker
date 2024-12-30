@@ -4,7 +4,7 @@ import { useDraggable } from '@dnd-kit/core'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../ui/card'
 import { Offer } from '@prisma/client'
 import { Button } from '../ui/button'
-import { Trash2Icon, ClockIcon, Loader2 } from 'lucide-react'
+import { Trash2Icon, ClockIcon, Loader2, CircleDotIcon } from 'lucide-react'
 import { deleteOffer } from '@/lib/actions/offers'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -47,6 +47,11 @@ export function Draggable({ id, offer }: { id: number, offer: Offer }) {
                 </CardTitle>
                 <CardDescription>
                     {offer.position}
+                    <div className="flex items-center gap-1 mt-2">
+                        {offer.tags.map((tag) => (
+                            <span key={tag} className="bg-neutral-800 text-neutral-200 px-2 py-1 rounded-md text-xs">{tag}</span>
+                        ))}
+                    </div>
                 </CardDescription>
             </CardHeader>
         </Card>

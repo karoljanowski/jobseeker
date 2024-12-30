@@ -2,8 +2,9 @@
 
 import { Input } from "@/components/ui/input";
 import { updateOfferTags } from "@/lib/actions/singleOffer";
-import { Loader2, X } from "lucide-react";
-import { startTransition, useActionState, useEffect, useState } from "react";
+import { Loader2, X, Plus } from "lucide-react";
+import { startTransition, useActionState, useEffect, useState, useRef } from "react";
+
 
 const Tags = ({ tags, offerId }: { tags: string[], offerId: number }) => {
     const [state, formAction, pending] = useActionState(updateOfferTags, { tags: tags, success: false, error: null })
@@ -24,7 +25,7 @@ const Tags = ({ tags, offerId }: { tags: string[], offerId: number }) => {
     return (
         <div className='flex flex-col gap-2'>
             <span className='text-neutral-500 text-sm'>Tags</span>
-            <div className='flex flex-wrap gap-2'>
+            <div className='flex flex-wrap items-center gap-2'>
                 {state.tags.map((tag) => <Tag key={tag} tag={tag} onRemove={handleRemoveTag} />)}
                 <AddTag onAdd={handleAddTag} pending={pending} />
             </div>
@@ -34,8 +35,8 @@ const Tags = ({ tags, offerId }: { tags: string[], offerId: number }) => {
 
 const Tag = ({ tag, onRemove }: { tag: string, onRemove: (tag: string) => void }) => {
     return (
-        <div className='bg-neutral-800 px-3 py-1 rounded-lg w-fit text-sm relative group'>
-            {tag}
+        <div className='bg-neutral-800 px-3 py-1 rounded-lg inline-flex items-center text-sm relative group'>
+            <span className='pr-1'>{tag}</span>
             <X className='w-4 h-4 p-0.5 cursor-pointer absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity' onClick={() => onRemove(tag)} />
         </div>
     )
@@ -43,6 +44,8 @@ const Tag = ({ tag, onRemove }: { tag: string, onRemove: (tag: string) => void }
 
 const AddTag = ({ onAdd, pending }: { onAdd: (tag: string) => void, pending: boolean }) => {
     const [tag, setTag] = useState('')
+    const inputRef = useRef<HTMLInputElement>(null)
+    const spanRef = useRef<HTMLSpanElement>(null)
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
@@ -50,14 +53,38 @@ const AddTag = ({ onAdd, pending }: { onAdd: (tag: string) => void, pending: boo
         }
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTag(e.target.value)
+        if (spanRef.current && inputRef.current) {
+            spanRef.current.textContent = e.target.value
+            inputRef.current.style.width = `${Math.max(90, spanRef.current.scrollWidth + 8)}px`
+        }
+    }
+
     const handleAdd = () => {
         onAdd(tag)
         setTag('')
+        if (inputRef.current) {
+            inputRef.current.style.width = '90px'
+        }
     }
 
     return (
         <div>
-            {pending ? <Loader2 className='w-4 h-4 animate-spin' /> : <Input className='bg-transparent border-dashed border-neutral-800 text-white px-2 py-1 h-auto w-32 focus-visible:ring-offset-0 focus-visible:border-white' value={tag} onChange={(e) => setTag(e.target.value)} onKeyDown={handleKeyDown} placeholder='+ Add tag' />}
+            {pending ? <Loader2 className='w-4 h-4 animate-spin' /> : 
+            <div className='flex items-center gap-2 relative'>
+                <Input 
+                    ref={inputRef}
+                    className='bg-transparent border-dashed border-neutral-800 text-white px-2 py-1 h-auto w-[90px] focus-visible:ring-offset-0 focus-visible:border-white' 
+                    value={tag} 
+                    onChange={handleChange} 
+                    onKeyDown={handleKeyDown} 
+                    placeholder='+ Add tag' 
+                />
+                <span ref={spanRef} className="opacity-0 absolute -z-10"></span>
+                {tag.length > 0 && <Plus className='w-5 h-5 p-0.5 cursor-pointer bg-indigo-600 rounded-full absolute -right-6 top-0 bottom-0 my-auto' onClick={handleAdd} />}
+            </div>
+            }
         </div>
     )
 }
