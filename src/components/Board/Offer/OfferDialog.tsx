@@ -33,14 +33,13 @@ const OfferDialog = () => {
         }
     }, [offerId])
 
-    useEffect(() => {
-        if(!open){
-            router.push('/dashboard')
-        }
-    }, [open])
+    const handleClose = () => {
+        setOpen(false)
+        router.push('/dashboard')
+    }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className='bg-neutral-950 border-neutral-900 w-full max-w-[1400px] overflow-y-auto h-[90vh] max-h-[800px] flex flex-col focus-visible:outline-none'>
                 <DialogHeader>
                     <DialogTitle>Offer Details</DialogTitle>

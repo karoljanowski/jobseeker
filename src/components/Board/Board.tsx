@@ -2,19 +2,12 @@
 
 import React, { useState, useEffect, useOptimistic, startTransition } from 'react'
 import { DndContext, closestCorners, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core'
-import { Draggable } from './Draggable'
+import { restrictToWindowEdges } from '@dnd-kit/modifiers'
 import { Droppable } from './Droppable'
 import { updateOfferStatus } from '@/lib/actions/offers'
 import { Offer, OfferStatus } from '@prisma/client'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
-import { AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
-
-type Column = {
-    id: string
-    title: string
-    offers: Offer[]
-}
+import { Column } from '@/lib/types/board'
 
 const initialColumns: Column[] = [
     {
@@ -99,23 +92,10 @@ const Board = ({ offers }: { offers: Column[] }) => {
     }
 
     return (
-        <DndContext id="board" sensors={sensors} collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
+        <DndContext id="board" sensors={sensors} collisionDetection={closestCorners} onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
             <div className="grid grid-cols-3 gap-4 w-full h-full">
                 {optimisticColumns.map((column) => (
-                    <Droppable key={column.id} id={column.id}>
-                        <Card className="bg-neutral-950 border-none h-full">
-                            <CardHeader className="px-5 pt-5 pb-1">
-                                <CardTitle>{column.title}</CardTitle>
-                            </CardHeader>
-                            <CardContent className='flex flex-col gap-2 p-3 h-full'>
-                                <AnimatePresence mode="popLayout">
-                                    {column.offers.map((offer) => (
-                                        <Draggable key={offer.id} id={offer.id} offer={offer} />
-                                    ))}
-                                </AnimatePresence>
-                            </CardContent>
-                        </Card>
-                    </Droppable>
+                    <Droppable key={column.id} id={column.id} column={column} />
                 ))}
             </div>
         </DndContext>

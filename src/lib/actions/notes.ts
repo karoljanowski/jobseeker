@@ -2,9 +2,11 @@
 
 import { prisma } from "@/lib/prisma"
 
-import { Note } from "@prisma/client"
-
-export const addNote = async (prevState: { notes: Note[], success: boolean, error: string | null }, data: { content: string, offerId: number }) => {
+export const addNote = async (data: { content: string, offerId: number }) => {
+    if(data.content.length === 0){
+        return { success: false, error: 'Note cannot be empty' }
+    }
+    
     try {
         const newNote = await prisma.note.create({
             data: {
@@ -12,8 +14,38 @@ export const addNote = async (prevState: { notes: Note[], success: boolean, erro
                 offerId: data.offerId
             }
         })
-        return { notes: [newNote, ...prevState.notes], success: true, error: null }
+        return { success: true, error: null, newNote: newNote }
     } catch (error) {
-        return { notes: prevState.notes, success: false, error: 'Failed to add note' }
+        return { success: false, error: 'Failed to add note' }
+    }
+}
+
+export const deleteNote = async (noteId: string) => {
+    try {
+        await prisma.note.delete({
+            where: { id: noteId }
+        })
+        return { 
+            success: true, 
+            error: null 
+        }
+    } catch (error) {
+        return { success: false, error: 'Failed to delete note' }
+    }
+}
+
+export const editNote = async (data: { id: string, content: string }) => {
+    try {
+        const updatedNote = await prisma.note.update({
+            where: { id: data.id },
+            data: { content: data.content }
+        })
+        return {
+            updatedNote,
+            success: true, 
+            error: null 
+        }
+    } catch (error) {
+        return { success: false, error: 'Failed to update note' }
     }
 }

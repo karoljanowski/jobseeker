@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "./ui/button"
-import { BookmarkCheckIcon, SearchIcon, FileIcon, SettingsIcon, LogOutIcon } from "lucide-react"
+import { BookmarkCheckIcon, FileIcon, SettingsIcon, LogOutIcon, BarChartIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { logout } from "@/lib/actions/auth"
@@ -22,8 +22,9 @@ const Menu = () => {
     return (
         <div className="flex gap-1 bg-neutral-950 backdrop-blur-xl rounded-lg px-4 py-3 mb-4">
             <MenuItem title="Board" icon={<BookmarkCheckIcon className="w-5 h-5" />} href="/dashboard" />
+            <MenuItem title="Stats" icon={<BarChartIcon className="w-5 h-5" />} href="/dashboard/stats" />
             <MenuItem title="Files" icon={<FileIcon className="w-5 h-5" />} href="/dashboard/files" />
-            <MenuItem title="Settings" icon={<SettingsIcon className="w-5 h-5" />} href="/settings" />
+            <MenuItem title="Settings" icon={<SettingsIcon className="w-5 h-5" />} href="/dashboard/settings" />
             <Button 
                 variant="ghost" 
                 className="gap-3 ml-auto h-7 text-red-500 hover:text-red-400 hover:bg-red-500/10" 

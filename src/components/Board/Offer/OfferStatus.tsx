@@ -32,7 +32,7 @@ const OfferStatus = ({ status, offerId }: { status: OfferStatusType, offerId: nu
 
     return (
         <Select value={state.status} onValueChange={handleChange}>
-            <SelectTrigger className='bg-neutral-900 border-none focus:ring-offset-0'>
+            <SelectTrigger className='bg-neutral-900 hover:bg-neutral-800 transition-colors border-none focus:ring-offset-0'>
                 {pending ? 
                     <div className='flex items-center gap-2'>
                         <Loader2 className='w-4 h-4 animate-spin' />
@@ -42,10 +42,10 @@ const OfferStatus = ({ status, offerId }: { status: OfferStatusType, offerId: nu
                 }
             </SelectTrigger>
             <SelectContent className='bg-neutral-900 border-none text-white'>
-                <SelectItem value='OPEN'>Open</SelectItem>
-                <SelectItem value='SENDED'>Sended</SelectItem>
-                <SelectItem value='PROCESSING'>Processing</SelectItem>
-                <SelectItem value='FINISHED'>Finished</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-neutral-800 transition-colors" value='OPEN'>Open</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-neutral-800 transition-colors" value='SENDED'>Sended</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-neutral-800 transition-colors" value='PROCESSING'>Processing</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-neutral-800 transition-colors" value='FINISHED'>Finished</SelectItem>
             </SelectContent>
         </Select>
     )

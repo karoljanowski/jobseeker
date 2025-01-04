@@ -5,21 +5,30 @@ import { OfferWithNotes } from "@/lib/types/offer"
 
 type ResumeAnaizeState = {
     success: boolean
-    error: string | undefined | null
-    response: string | undefined | null
+    error: string | null
+    response: string | null
 }
 
 export const resumeAnaize = async (prevState: ResumeAnaizeState, offer: OfferWithNotes) => {
     try {
-        const { company, position, description, requirements, notes, file } = offer
+        
+        const { company, position, description, requirements, file } = offer
 
         if (!file) {
-            throw new Error("No resume file provided")
+            return {
+                success: false,
+                error: "No resume file provided",
+                response: null
+            }
         }
 
         const resume = await fetch(file.fileUrl)
         if (!resume.ok) {
-            throw new Error("Failed to fetch resume file")
+            return {
+                success: false,
+                error: "Failed to fetch resume file",
+                response: null
+            }
         }
 
         const resumeBlob = await resume.blob()
@@ -53,13 +62,15 @@ export const resumeAnaize = async (prevState: ResumeAnaizeState, offer: OfferWit
 
         return {
             success: true,
-            response: JSON.stringify(response)
+            response: response.choices[0].message.content,
+            error: null
         }
     } catch (error) {
         console.error("Resume analysis error:", error)
         return {
             success: false,
-            error: error instanceof Error ? error.message : "An unknown error occurred"
+            error: "An unknown error occurred",
+            response: null
         }
     }
 }

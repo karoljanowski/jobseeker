@@ -8,7 +8,7 @@ import Loader from '@/components/Loader';
 
 const DashboardPage = async () => {
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 h-full">
             <div className="flex justify-between items-center mb-4">
                 <div>
                     <h1 className="text-2xl font-bold flex items-center gap-2">
