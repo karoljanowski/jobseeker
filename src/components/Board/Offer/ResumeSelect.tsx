@@ -52,7 +52,7 @@ const ResumeSelect = ({ selectedFile, offerId }: { selectedFile: FileType | null
                      : <div className='flex items-center gap-2'><FileIcon className='w-4 h-4' />Select resume</div>}
                 </Button>
             </DialogTrigger>
-            <DialogContent className='bg-neutral-950 border-neutral-900 w-full max-w-[1000px]'>
+            <DialogContent className='bg-neutral-950 border-neutral-900 w-full max-w-[1000px] max-h-[80vh] overflow-y-auto'>
                 <DialogHeader>
                     <DialogTitle>Select resume</DialogTitle>
                 </DialogHeader>

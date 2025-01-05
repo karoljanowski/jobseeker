@@ -69,3 +69,12 @@ export const updateOfferField = async (prevState: { value: string, success: bool
         return { value: prevState.value, success: false, error: 'Failed to update offer field' }
     }
 }
+
+export const updateOfferDate = async (prevState: { date: Date, success: boolean, error: string | null }, data: { offerId: number, field: string, value: Date }) => {
+    try {
+        await prisma.offer.update({ where: { id: data.offerId }, data: { [data.field]: data.value } })
+        return { date: data.value, success: true, error: null }
+    } catch (error) {
+        return { date: prevState.date, success: false, error: 'Failed to update offer date' }
+    }
+}

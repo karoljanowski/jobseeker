@@ -11,7 +11,8 @@ export type AddOfferFormType = {
         source?: string[],
         location?: string[],
         fileId?: string[],
-        other?: string
+        other?: string,
+        requirements?: string[]
     } | null
 }
 

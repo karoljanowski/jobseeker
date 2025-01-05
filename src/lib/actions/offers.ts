@@ -53,12 +53,12 @@ export const deleteOffer = async (prevState: DeleteOfferFormType, offerId: numbe
 const addOfferSchema = z.object({
     company: z.string().refine(value => value.length > 0, { message: 'Company is required' }),
     position: z.string().refine(value => value.length > 0, { message: 'Position is required' }),
-    description: z.string().refine(value => value.length > 0, { message: 'Description is required' }),
     expiresAt: z.date().refine(value => value.getTime() > Date.now(), { message: 'Expires at must be in the future' }),
     source: z.string().refine(value => value.length > 0, { message: 'Source is required' }),
     location: z.string().refine(value => value.length > 0, { message: 'Location is required' }),
     fileId: z.number().nullable().optional(),
-    requirements: z.string().nullable()
+    requirements: z.string().optional(),
+    description: z.string().optional(),
 })
 
 export const addOffer = async (prevState: AddOfferFormType, offer: OfferFrom) => {
@@ -78,11 +78,11 @@ export const addOffer = async (prevState: AddOfferFormType, offer: OfferFrom) =>
                 company,
                 position,
                 description,
+                requirements,
                 expiresAt,
                 source,
                 location,
                 fileId,
-                requirements,
                 userId: userId
             }
         })

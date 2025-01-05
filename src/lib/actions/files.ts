@@ -11,8 +11,19 @@ export const getFiles = async () => {
     }
     try {
         const files = await prisma.file.findMany({
-            where: { userId }
+            where: { userId },
+            include: {
+                Offer: {
+                    select: {
+                        id: true,
+                        company: true,
+                        position: true,
+                        status: true
+                    }
+                }
+            }
         })
+        console.log(files[0].Offer)
         return { success: true, files }
     } catch (error) {
         console.error('Error fetching files:', error);

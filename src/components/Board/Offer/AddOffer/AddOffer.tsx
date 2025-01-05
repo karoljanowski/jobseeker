@@ -33,12 +33,16 @@ const AddOffer = () => {
             router.refresh()
         })
     }
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, expiresAt: new Date(e.target.value) })
+    const handleDateChange = (date: Date) => {
+        setForm({ ...form, expiresAt: date })
     }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value })
+    }
+
+    const handleEditorChange = (content: string, name: string) => {
+        setForm({ ...form, [name]: content })
     }
 
     useEffect(() => {
@@ -68,9 +72,9 @@ const AddOffer = () => {
             <DialogContent className='bg-neutral-950 border-neutral-900 w-full max-w-[1000px] overflow-y-auto max-h-[90vh]'>
                 <DialogHeader>
                     <DialogTitle>Add new offer</DialogTitle>
-                    <DialogDescription>Add a new offer to the board</DialogDescription>
+                    <DialogDescription>Fill in the form to add a new offer</DialogDescription>
                 </DialogHeader>
-                <AddOfferForm form={form} setForm={setForm} errors={state.errors} handleDateChange={handleDateChange} handleInputChange={handleInputChange} />
+                <AddOfferForm form={form} setForm={setForm} errors={state.errors} handleDateChange={handleDateChange} handleInputChange={handleInputChange} handleEditorChange={handleEditorChange} />
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button className='h-8' variant="destructive">Cancel</Button>

@@ -15,7 +15,7 @@ model Offer {
   file         File?      @relation(fields: [fileId], references: [id])
   company      String
   position     String
-  description  String
+  description  String?
   location     String
   dateAdded    DateTime    @default(now())
   dateUpdated  DateTime    @updatedAt

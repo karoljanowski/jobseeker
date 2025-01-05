@@ -42,22 +42,20 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
     };
     
     return (
-        <div className='flex flex-col col-span-2'>
-            <Dialog open={opened} onOpenChange={setOpened}>
-                <DialogTrigger asChild>
-                    <Button disabled={loading} className='bg-cyan-700 border-cyan-900'>Get details from link <SearchIcon className='w-4 h-4' /></Button>
-                </DialogTrigger>
-                <DialogContent className='bg-neutral-950 border-neutral-900'>
-                    <DialogHeader>
-                        <DialogTitle>Get details from link</DialogTitle>
-                    </DialogHeader>
-                    <Input type='url' name='get-from-link' onChange={(e) => setLink(e.target.value)} className='bg-neutral-950 border-neutral-900' placeholder='for example: https://www.google.com' />
-                    <Button disabled={loading} onClick={handleGetFromLink} className='bg-cyan-700 border-cyan-900'>
-                        {!loading ? 'Get details' : <Loader2 className='w-5 h-5 animate-spin'/>}
-                    </Button>
-                </DialogContent>
-            </Dialog>
-        </div>
+        <Dialog open={opened} onOpenChange={setOpened}>
+            <DialogTrigger asChild>
+                <Button disabled={loading} className='bg-cyan-700 border-cyan-900'>Get details from link <SearchIcon className='w-4 h-4' /></Button>
+            </DialogTrigger>
+            <DialogContent className='bg-neutral-950 border-neutral-900'>
+                <DialogHeader>
+                    <DialogTitle>Get details from link</DialogTitle>
+                </DialogHeader>
+                <Input type='url' name='get-from-link' onChange={(e) => setLink(e.target.value)} className='bg-neutral-950 border-neutral-900' placeholder='for example: https://www.google.com' />
+                <Button disabled={loading} onClick={handleGetFromLink} className='bg-cyan-700 border-cyan-900'>
+                    {!loading ? 'Get details' : <Loader2 className='w-5 h-5 animate-spin'/>}
+                </Button>
+            </DialogContent>
+        </Dialog>
     )
 }
 

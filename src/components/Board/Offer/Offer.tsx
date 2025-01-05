@@ -6,6 +6,7 @@ import ResumeSelect from './ResumeSelect'
 import CheckAI from './CheckAI'
 import Source from './Source'
 import Tags from './Tags'
+import OfferDateItem from './OfferDateItem'
 
 const Offer = ({ offer }: { offer: OfferWithNotes }) => {
     return (
@@ -26,8 +27,8 @@ const MainInfo = ({ offer }: { offer: OfferWithNotes }) => {
                 <OfferItem name='Company' value={company} offerId={id} field='company' />
                 <OfferItem name='Position' value={position} offerId={id} field='position' />
             </div>
-            <OfferItem name='Description' value={description} editor={true} offerId={id} field='description' />
-            <OfferItem name='Requirements' value={requirements || ''} offerId={id} field='requirements' />
+            <OfferItem name='Description' value={description || ''} editor={true} offerId={id} field='description' />
+            <OfferItem name='Requirements' value={requirements || ''} editor={true} offerId={id} field='requirements' />
             <Notes notes={notes} offerId={offer.id} />
         </div>
     )
@@ -39,8 +40,8 @@ const ColumnInfo = ({ offer }: { offer: OfferWithNotes }) => {
         <div className='flex flex-col gap-2'>
             <OfferStatus status={status} offerId={offer.id} />
             <Source source={source} />
-            <OfferItem name='Expires At' value={expiresAt.toLocaleDateString()} offerId={offer.id} field='expiresAt' />
-            <OfferItem name='Date Added' value={dateAdded.toLocaleDateString()} offerId={offer.id} field='dateAdded' />
+            <OfferDateItem name='Expires At' value={expiresAt} offerId={offer.id} field='expiresAt' />
+            <OfferDateItem name='Date Added' value={dateAdded} offerId={offer.id} field='dateAdded' />
             <Tags tags={tags} offerId={offer.id} />
             <ResumeSelect selectedFile={file ? file : null} offerId={offer.id} />
             <CheckAI offer={offer} />

@@ -7,8 +7,8 @@ import Loader from "@/components/Loader";
 
 const FilesPage = () => {
     return (
-        <div className="flex flex-col gap-2">
-            <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col gap-2 h-full">
+            <div className="flex justify-between items-center mb-4">
                 <div>
                     <h1 className="text-2xl font-bold flex items-center gap-2">
                         <FileIcon className="w-5 h-5" />
@@ -19,6 +19,7 @@ const FilesPage = () => {
                     </p>
                 </div>
                 <AddFile />
+
             </div>
             <Suspense fallback={<Loader />}>
                 <FilesWrapper />
@@ -26,7 +27,6 @@ const FilesPage = () => {
         </div>
     );
 }
-
 const FilesWrapper = async () => {
     const files = await getFiles()
     if(files.success && files.files) {

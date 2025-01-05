@@ -1,21 +1,30 @@
 'use client'
 
-import { File as FileType } from "@prisma/client"
-import { Loader2, Trash2Icon } from "lucide-react"
+import { ArrowRightIcon, EyeIcon, Loader2, Trash2Icon } from "lucide-react"
 import { Button } from "../ui/button"
 import Image from "next/image"
 import { startTransition, useActionState, useEffect } from "react"
 import { deleteFile } from "@/lib/actions/files"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { HoverCard, HoverCardTrigger, HoverCardContent } from "../ui/hover-card"
+import { FileWithOffers } from "@/lib/types/files"
+import { File as FileType } from "@prisma/client"
 
-const Files = ({ files, onSelect, dialogMode = false }: { files: FileType[], onSelect?: (file: FileType) => void, dialogMode?: boolean }) => {
+interface FilesProps {
+  files: FileWithOffers[] | FileType[]
+  onSelect?: (file: FileWithOffers | FileType) => void
+  dialogMode?: boolean
+}
+
+const Files = ({ files, onSelect, dialogMode = false }: FilesProps) => {
   return (
-    <div className="flex flex-col gap-4 w-full overflow-x-auto">
+    <div className="flex flex-col gap-4 w-full">
       {/* Header row */}
-      <div className={`min-w-[600px] border-b border-neutral-700 pb-4 grid items-center gap-4 px-4 ${dialogMode ? 'grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_100px_100px_120px_60px]'}`}> 
+      <div className={`min-w-[600px] border-b border-neutral-700 pb-4 grid items-center gap-4 px-4 ${dialogMode ? 'grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`}> 
         <div className="text-sm font-medium">Thumb</div>
         <div className="text-sm font-medium">File</div>
+        {!dialogMode && 'Offer' in files[0] && <div className="text-sm font-medium">Offers</div>}
         <div className="text-sm font-medium">Size</div>
         <div className="text-sm font-medium">Format</div>
         <div className="text-sm font-medium">Added at</div>
@@ -33,7 +42,7 @@ const Files = ({ files, onSelect, dialogMode = false }: { files: FileType[], onS
   )
 }
 
-const File = ({ file, onSelect, dialogMode }: { file: FileType, onSelect?: (file: FileType) => void, dialogMode?: boolean }) => {
+const File = ({ file, onSelect, dialogMode }: { file: FileWithOffers | FileType, onSelect?: (file: FileWithOffers | FileType) => void, dialogMode?: boolean }) => {
   const router = useRouter();
   const [state, dispatch, pending] = useActionState(deleteFile, {
     success: false,
@@ -67,7 +76,7 @@ const File = ({ file, onSelect, dialogMode }: { file: FileType, onSelect?: (file
 
   return (
     <div 
-      className={`min-w-[600px] grid items-center gap-4 px-4 py-2 rounded-lg transition-colors even:bg-neutral-800/50 ${dialogMode ? 'hover:bg-neutral-800/80 cursor-pointer grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_100px_100px_120px_60px]'}`} 
+      className={`min-w-[600px] grid items-center gap-4 px-4 py-2 rounded-lg transition-colors even:bg-neutral-800/50 ${dialogMode ? 'hover:bg-neutral-800/80 cursor-pointer grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`} 
       onClick={() => onSelect?.(file)}
     >
       <Image 
@@ -78,6 +87,7 @@ const File = ({ file, onSelect, dialogMode }: { file: FileType, onSelect?: (file
         className="w-16 h-16 object-cover border border-gray-500 rounded-lg bg-white"
       />
       <p className="truncate">{file.publicId}</p>
+      {!dialogMode && 'Offer' in file && <FileOffers offers={file.Offer} />}
       <p className="text-sm">{calculateFileSize(file.bytes)}</p>
       <p className="text-sm">{file.format || '-'}</p>
       <p className="text-sm">{file.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
@@ -88,6 +98,29 @@ const File = ({ file, onSelect, dialogMode }: { file: FileType, onSelect?: (file
         </div>
       }
     </div>
+  )
+}
+
+const FileOffers = ({ offers }: { offers: FileWithOffers['Offer'] }) => {
+  return (
+    <HoverCard>
+      <HoverCardTrigger>
+        <Button variant="default" className="px-2 bg-neutral-800 hover:bg-neutral-800/80 h-8">
+          <EyeIcon className="w-4 h-4 text-neutral-400" /> Offers
+        </Button>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-[400px] bg-neutral-800 border-none text-white">
+        <div className="flex flex-col gap-2">
+          {offers.map((offer) => (
+            <div key={offer.id} className="flex flex-col border-b border-neutral-700 pb-2 last:border-none">
+              <p className="bg-neutral-200 text-xs text-neutral-800 px-2 py-1 rounded-full mb-1 w-fit">{offer.status}</p>
+              <p className="text-sm font-medium">{offer.position}</p>
+              <p className="text-xs">{offer.company}</p>
+            </div>
+          ))}
+        </div>
+      </HoverCardContent>
+    </HoverCard>
   )
 }
 

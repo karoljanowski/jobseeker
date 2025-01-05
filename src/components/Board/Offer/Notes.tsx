@@ -84,29 +84,14 @@ const Note = ({
         })
     }
 
+    const handleCancel = () => {
+        setIsEditing(false)
+        setEditContent(note.content)
+    }
+
     if (isEditing) {
         return (
-            <div className="flex flex-col">
-                <Editor content={editContent} onUpdate={setEditContent} />
-                <div className="flex gap-2 items-center mt-2">
-                    <Button 
-                        onClick={() => setIsEditing(false)} 
-                        variant="destructive" 
-                        className="h-8"
-                        disabled={isPending}
-                    >
-                        Cancel
-                    </Button>
-                    <Button 
-                        onClick={handleEdit} 
-                        variant="secondary" 
-                        className="h-8"
-                        disabled={isPending}
-                    >
-                        Save
-                    </Button>
-                </div>
-            </div>
+            <Editor content={editContent} onUpdate={setEditContent} onCancel={handleCancel} onSave={handleEdit} disabled={isPending} />
         )
     }
 
@@ -149,20 +134,6 @@ const NewNote = ({
     const [content, setContent] = useState('')
     const [isTyping, setIsTyping] = useState(false)
     const [isPending, startTransition] = useTransition()
-    const editorRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (editorRef.current && !editorRef.current.contains(event.target as Node)) {
-                setIsTyping(false)
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside)
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside)
-        }
-    }, [])
 
     const handleCancel = () => {
         setIsTyping(false)
@@ -186,27 +157,7 @@ const NewNote = ({
     return (
         <div>
             {isTyping ? 
-                <div ref={editorRef} className="w-full">
-                    <Editor content={content} onUpdate={setContent} />
-                    <div className='flex items-center gap-2 mt-2'>
-                        <Button 
-                            onClick={handleCancel} 
-                            variant='destructive' 
-                            className='h-7' 
-                            disabled={isPending}
-                        >
-                            Cancel
-                        </Button>
-                        <Button 
-                            onClick={handleSave} 
-                            variant='secondary' 
-                            className='h-7' 
-                            disabled={isPending}
-                        >
-                            Add
-                        </Button>
-                    </div>
-                </div>
+                <Editor content={content} onUpdate={setContent} onCancel={handleCancel} onSave={handleSave} disabled={isPending} />
             :
                 <div 
                     className="cursor-pointer border border-neutral-800 rounded-md p-2 w-full" 
