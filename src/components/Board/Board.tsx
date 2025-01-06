@@ -11,18 +11,18 @@ import { Column } from '@/lib/types/board'
 
 const initialColumns: Column[] = [
     {
-        id: OfferStatus.OPEN,
-        title: 'Open',
+        id: OfferStatus.SAVED,
+        title: 'Saved',
         offers: []
     },
     {
-        id: OfferStatus.SENDED,
-        title: 'Sended',
+        id: OfferStatus.SENT,
+        title: 'Sent',
         offers: []
     },
     {
-        id: OfferStatus.PROCESSING,
-        title: 'Processing',
+        id: OfferStatus.INTERVIEW,
+        title: 'Interview',
         offers: []
     }
 ]

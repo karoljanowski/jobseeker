@@ -42,9 +42,9 @@ const OfferStatus = ({ status, offerId }: { status: OfferStatusType, offerId: nu
                 }
             </SelectTrigger>
             <SelectContent className='bg-gray-800 border-none text-white'>
-                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='OPEN'>Open</SelectItem>
-                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='SENDED'>Sended</SelectItem>
-                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='PROCESSING'>Processing</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='SAVED'>Saved</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='SENT'>Sent</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='INTERVIEW'>Interview</SelectItem>
                 <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='FINISHED'>Finished</SelectItem>
             </SelectContent>
         </Select>

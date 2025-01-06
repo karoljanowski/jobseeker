@@ -19,19 +19,19 @@ export const getOffers = async () => {
     console.log(offers)
     const columns = [
         {
-            id: OfferStatus.OPEN,
-            title: 'Open',
-            offers: offers.filter(offer => offer.status === OfferStatus.OPEN)
+            id: OfferStatus.SAVED,
+            title: 'Saved',
+            offers: offers.filter(offer => offer.status === OfferStatus.SAVED)
         },
         {
-            id: OfferStatus.SENDED,
-            title: 'Sended',
-            offers: offers.filter(offer => offer.status === OfferStatus.SENDED)
+            id: OfferStatus.SENT,
+            title: 'Sent',
+            offers: offers.filter(offer => offer.status === OfferStatus.SENT)
         },
         {
-            id: OfferStatus.PROCESSING,
-            title: 'Processing',
-            offers: offers.filter(offer => offer.status === OfferStatus.PROCESSING)
+            id: OfferStatus.INTERVIEW,
+            title: 'Interview',
+            offers: offers.filter(offer => offer.status === OfferStatus.INTERVIEW)
         }
     ]
 

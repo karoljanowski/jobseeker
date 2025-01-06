@@ -10,7 +10,7 @@ datasource db {
 model Offer {
   id           Int         @id @default(autoincrement())
   accentColor  String      @default("#0000FF")
-  status       OfferStatus @default(OPEN)
+  status       OfferStatus @default(SAVED)
   source       String
   fileId       Int?
   file         File?      @relation(fields: [fileId], references: [id])
@@ -51,9 +51,9 @@ model User {
 }
 
 enum OfferStatus {
-  OPEN
-  SENDED
-  PROCESSING
+  SAVED
+  SENT
+  INTERVIEW
   FINISHED
 }
 

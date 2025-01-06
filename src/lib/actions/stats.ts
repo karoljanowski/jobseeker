@@ -13,7 +13,7 @@ export const getStats = async () => {
         const openOffers = await prisma.offer.count({
             where: {
                 userId: userId,
-                status: OfferStatus.OPEN
+                status: OfferStatus.SAVED
             },
             // JAK CO TO NIE SKONCZONE
         })
