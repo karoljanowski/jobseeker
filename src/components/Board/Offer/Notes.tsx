@@ -29,8 +29,8 @@ const Notes = ({ offerId, notes }: NotesProps) => {
     }
 
     return (
-        <div className="flex flex-col gap-2 border-t border-neutral-800 pt-4">
-            <span className="text-sm text-gray-500">Notes</span>
+        <div className="flex flex-col gap-2 border-t border-gray-800 pt-4">
+            <span className="text-sm text-gray-400">Notes</span>
             <NewNote offerId={offerId} onNoteAdd={handleAddNote} />
             <div className="mt-4 flex flex-col gap-2">
                 {notesState.map((note) => (
@@ -98,7 +98,7 @@ const Note = ({
     return (
         <div className="flex flex-col">
 
-            <div className="flex text-sm text-gray-500 gap-2">
+            <div className="flex text-sm text-gray-400 gap-2">
                 <span>{note.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                 <span>{note.createdAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</span>
             </div>
@@ -160,10 +160,10 @@ const NewNote = ({
                 <Editor content={content} onUpdate={setContent} onCancel={handleCancel} onSave={handleSave} disabled={isPending} />
             :
                 <div 
-                    className="cursor-pointer border border-neutral-800 rounded-md p-2 w-full" 
+                    className="cursor-pointer bg-gray-800 rounded-md px-4 py-2 w-full" 
                     onClick={() => setIsTyping(true)}
                 >
-                    <span className="text-sm text-gray-500">Click to add a note</span>
+                    <span className="text-sm text-gray-400">Click to add a note</span>
                 </div>
             }
         </div>

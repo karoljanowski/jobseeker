@@ -7,9 +7,9 @@ import { startTransition, useActionState, useEffect } from "react"
 import { deleteFile } from "@/lib/actions/files"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
-import { HoverCard, HoverCardTrigger, HoverCardContent } from "../ui/hover-card"
 import { FileWithOffers } from "@/lib/types/files"
 import { File as FileType } from "@prisma/client"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 
 interface FilesProps {
   files: FileWithOffers[] | FileType[]
@@ -21,7 +21,7 @@ const Files = ({ files, onSelect, dialogMode = false }: FilesProps) => {
   return (
     <div className="flex flex-col gap-4 w-full">
       {/* Header row */}
-      <div className={`min-w-[600px] border-b border-neutral-700 pb-4 grid items-center gap-4 px-4 ${dialogMode ? 'grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`}> 
+      <div className={`min-w-[600px] border-b border-gray-700 pb-4 grid items-center gap-4 px-4 ${dialogMode ? 'grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`}> 
         <div className="text-sm font-medium">Thumb</div>
         <div className="text-sm font-medium">File</div>
         {!dialogMode && 'Offer' in files[0] && <div className="text-sm font-medium">Offers</div>}
@@ -36,7 +36,7 @@ const Files = ({ files, onSelect, dialogMode = false }: FilesProps) => {
         {files.map((file) => (
           <File key={file.id} file={file} onSelect={onSelect ? onSelect : undefined} dialogMode={dialogMode} />
         ))}
-        {files.length === 0 && <div className="text-center text-sm text-neutral-400">No files found</div>}
+        {files.length === 0 && <div className="text-center text-sm text-gray-400">No files found</div>}
       </div>
     </div>
   )
@@ -76,7 +76,7 @@ const File = ({ file, onSelect, dialogMode }: { file: FileWithOffers | FileType,
 
   return (
     <div 
-      className={`min-w-[600px] grid items-center gap-4 px-4 py-2 rounded-lg transition-colors even:bg-neutral-800/50 ${dialogMode ? 'hover:bg-neutral-800/80 cursor-pointer grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`} 
+      className={`min-w-[600px] grid items-center gap-4 px-4 py-2 rounded-lg transition-colors even:bg-gray-800/50 ${dialogMode ? 'hover:bg-gray-800/80 cursor-pointer grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`} 
       onClick={() => onSelect?.(file)}
     >
       <Image 
@@ -103,24 +103,25 @@ const File = ({ file, onSelect, dialogMode }: { file: FileWithOffers | FileType,
 
 const FileOffers = ({ offers }: { offers: FileWithOffers['Offer'] }) => {
   return (
-    <HoverCard>
-      <HoverCardTrigger>
-        <Button variant="default" className="px-2 bg-neutral-800 hover:bg-neutral-800/80 h-8">
-          <EyeIcon className="w-4 h-4 text-neutral-400" /> Offers
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="default" className="px-4 bg-gray-700 hover:bg-gray-600/80 h-8 w-fit">
+          <EyeIcon className="w-4 h-4 text-gray-400" /> Offers
         </Button>
-      </HoverCardTrigger>
-      <HoverCardContent className="w-[400px] bg-neutral-800 border-none text-white">
+      </PopoverTrigger>
+      <PopoverContent className="w-[400px] bg-gray-700 border-none text-white">
         <div className="flex flex-col gap-2">
-          {offers.map((offer) => (
-            <div key={offer.id} className="flex flex-col border-b border-neutral-700 pb-2 last:border-none">
-              <p className="bg-neutral-200 text-xs text-neutral-800 px-2 py-1 rounded-full mb-1 w-fit">{offer.status}</p>
+          {offers.length > 0 && offers.map((offer) => (
+            <div key={offer.id} className="flex flex-col border-b border-gray-700 pb-2 last:border-none">
+              <p className="bg-gray-200 text-xs text-gray-800 px-2 py-1 rounded-full mb-1 w-fit">{offer.status}</p>
               <p className="text-sm font-medium">{offer.position}</p>
               <p className="text-xs">{offer.company}</p>
             </div>
           ))}
+          {offers.length === 0 && <div className="text-center text-sm text-gray-200">File is not associated with any offers</div>}
         </div>
-      </HoverCardContent>
-    </HoverCard>
+      </PopoverContent>
+    </Popover>
   )
 }
 

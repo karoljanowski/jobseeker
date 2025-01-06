@@ -14,7 +14,7 @@ const FilesPage = () => {
                         <FileIcon className="w-5 h-5" />
                         Files
                     </h1>
-                    <p className="text-sm text-neutral-400">
+                    <p className="text-sm text-gray-400">
                         Manage your files
                     </p>
                 </div>

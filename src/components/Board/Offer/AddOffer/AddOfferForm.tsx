@@ -23,7 +23,7 @@ interface AddOfferFormProps {
 const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, handleEditorChange, errors }: AddOfferFormProps) => {
     return (
         <div className='grid grid-cols-2 gap-4'>
-            <div className='flex flex-col col-span-2 border-b border-neutral-800 pb-4'>
+            <div className='flex flex-col col-span-2 border-b border-gray-800 pb-4'>
                 <GetFromLink setForm={setForm} />
             </div>
             <LabelInput label='Company' placeholder='for example: Google' type='text' required name='company' value={form.company} onChange={handleInputChange} errors={errors?.company} />

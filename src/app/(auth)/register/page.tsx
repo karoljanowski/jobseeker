@@ -26,7 +26,7 @@ export default function RegisterPage() {
     }, [state])
 
     return (
-        <Card className="w-[400px] bg-neutral-950 border-neutral-800">
+        <Card className="w-[400px] bg-gray-950 border-gray-800">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold">Register</CardTitle>
                 <CardDescription>Create a new account</CardDescription>
@@ -39,9 +39,9 @@ export default function RegisterPage() {
                     <Button type="submit" className="w-full" disabled={pending} variant="secondary">
                         {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Register'}
                     </Button>
-                    <p className="text-sm text-center text-neutral-500">
+                    <p className="text-sm text-center text-gray-500">
                         Already have an account?{' '}
-                        <Link href="/login" className="text-neutral-200 hover:underline">
+                        <Link href="/login" className="text-gray-200 hover:underline">
                             Login
                         </Link>
                     </p>

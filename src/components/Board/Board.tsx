@@ -93,7 +93,7 @@ const Board = ({ offers }: { offers: Column[] }) => {
 
     return (
         <DndContext id="board" sensors={sensors} collisionDetection={closestCorners} onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
-            <div className="grid grid-cols-3 gap-4 w-full h-full">
+            <div className="grid grid-rows-auto xl:grid-cols-3 xl:grid-rows-1 gap-4 w-full h-full">
                 {optimisticColumns.map((column) => (
                     <Droppable key={column.id} id={column.id} column={column} />
                 ))}

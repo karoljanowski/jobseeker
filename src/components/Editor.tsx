@@ -48,9 +48,9 @@ const Editor = ({ content, onUpdate, onCancel, onSave, disabled, placeholder }: 
   }
 
   return (
-    <div className="flex flex-col w-full" ref={editorRef}>
-      <div className="editor-container w-full border border-neutral-900 rounded-lg bg-neutral-950 mt-1">
-        <div className="editor-toolbar flex flex-wrap gap-2 px-2 py-1 border-b border-neutral-900 bg-neutral-900 rounded-t-lg">
+    <div className="flex flex-col w-full editor" ref={editorRef}>
+      <div className="editor-container w-full border border-gray-900 rounded-lg bg-gray-800 mt-1">
+        <div className="editor-toolbar flex flex-wrap gap-2 px-2 py-1 bg-gray-700 rounded-t-lg">
           <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} isActive={editor.isActive('bold')}>
             <Bold className='w-4 h-4' />
           </ToolbarButton>

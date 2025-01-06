@@ -24,7 +24,7 @@ const Tags = ({ tags, offerId }: { tags: string[], offerId: number }) => {
 
     return (
         <div className='flex flex-col gap-2'>
-            <span className='text-neutral-500 text-sm'>Tags</span>
+            <span className='text-gray-400 text-sm'>Tags</span>
             <div className='flex flex-wrap items-center gap-2'>
                 {state.tags.map((tag) => <Tag key={tag} tag={tag} onRemove={handleRemoveTag} />)}
                 <AddTag onAdd={handleAddTag} pending={pending} />
@@ -35,7 +35,7 @@ const Tags = ({ tags, offerId }: { tags: string[], offerId: number }) => {
 
 const Tag = ({ tag, onRemove }: { tag: string, onRemove: (tag: string) => void }) => {
     return (
-        <div className='bg-neutral-800 px-3 py-1 rounded-lg inline-flex items-center text-sm relative group'>
+        <div className='bg-gray-700 px-3 py-1 rounded-lg inline-flex items-center text-sm relative group'>
             <span className='pr-1'>{tag}</span>
             <X className='w-4 h-4 p-0.5 cursor-pointer absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity' onClick={() => onRemove(tag)} />
         </div>
@@ -75,14 +75,14 @@ const AddTag = ({ onAdd, pending }: { onAdd: (tag: string) => void, pending: boo
             <div className='flex items-center gap-2 relative'>
                 <Input 
                     ref={inputRef}
-                    className='bg-transparent border-dashed border-neutral-800 text-white px-2 py-1 h-auto w-[90px] focus-visible:ring-offset-0 focus-visible:border-white' 
+                    className='bg-transparent border-dashed border-gray-600 text-white px-2 py-1 h-auto w-[90px] focus-visible:ring-offset-0 focus-visible:border-white' 
                     value={tag} 
                     onChange={handleChange} 
                     onKeyDown={handleKeyDown} 
                     placeholder='+ Add tag' 
                 />
                 <span ref={spanRef} className="opacity-0 absolute -z-10"></span>
-                {tag.length > 0 && <Plus className='w-5 h-5 p-0.5 cursor-pointer bg-indigo-600 rounded-full absolute -right-6 top-0 bottom-0 my-auto' onClick={handleAdd} />}
+                {tag.length > 0 && <Plus className='w-5 h-5 p-0.5 cursor-pointer bg-purple-700 rounded-full absolute -right-6 top-0 bottom-0 my-auto' onClick={handleAdd} />}
             </div>
             }
         </div>

@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { OfferStatus, File } from "@prisma/client"
+import { DeleteOfferFormType } from "../types/offer"
 
 
 export async function getOffer(id: number) {
@@ -76,5 +77,32 @@ export const updateOfferDate = async (prevState: { date: Date, success: boolean,
         return { date: data.value, success: true, error: null }
     } catch (error) {
         return { date: prevState.date, success: false, error: 'Failed to update offer date' }
+    }
+}
+
+export const updateOfferColor = async (prevState: { color: string, success: boolean, error: string | null }, data: { offerId: number, color: string }) => {
+    try {
+        await prisma.offer.update({ where: { id: data.offerId }, data: { accentColor: data.color } })
+        return { color: data.color, success: true, error: null }
+    } catch (error) {
+        return { color: prevState.color, success: false, error: 'Failed to update offer color' }
+    }
+}
+
+export const deleteOffer = async (prevState: DeleteOfferFormType, data: { offerId: number }) => {
+    try {   
+        await prisma.note.deleteMany({
+            where: {
+                offerId: data.offerId
+            }
+        })
+        await prisma.offer.delete({
+            where: {
+                id: data.offerId
+            }
+        })
+        return { success: true, error: null }
+    } catch (error) {
+        return { success: false, error: error instanceof Error ? error.message : 'Error deleting offer' }
     }
 }

@@ -17,7 +17,7 @@ export function DatePicker({date, setDate, pending = false}: {date: Date, setDat
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button disabled={pending}>
+        <Button disabled={pending} variant='secondary'>
           {pending ? <><Loader2 className="w-4 h-4 animate-spin" /> Changing date...</> : 
           <>
             <CalendarIcon /> 
@@ -26,7 +26,7 @@ export function DatePicker({date, setDate, pending = false}: {date: Date, setDat
 
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 bg-neutral-900 border-neutral-900" side="top" align="start" sideOffset={4}>
+      <PopoverContent className="p-0 bg-gray-900 border-gray-900" side="top" align="start" sideOffset={4}>
         <Calendar
           mode="single"
           selected={date}

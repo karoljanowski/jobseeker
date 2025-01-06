@@ -32,13 +32,13 @@ const CheckAI = ({ offer }: { offer: OfferWithNotes }) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild disabled={true}>
-                <Button disabled={true} className="bg-indigo-600 hover:bg-indigo-700"><Sparkles className="w-4 h-4" />Click to check CV with AI</Button>
+                <Button disabled={true} variant='default'><Sparkles className="w-4 h-4" />Click to check CV with AI</Button>
             </DialogTrigger>
-            <div className="flex items-center justify-center gap-2 text-sm text-neutral-500">
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                 <InfoIcon className="w-4 h-4" />
                 <p className="leading-none">This option is unavailable for now.</p>
             </div>
-            <DialogContent className="bg-neutral-950 border-neutral-900 w-full max-w-[1000px]">
+            <DialogContent className="bg-gray-950 border-gray-900 w-full max-w-[1000px]">
                 {!pending && state.response ? <Response response={state.response} /> : <ResponseLoader />}
             </DialogContent>
         </Dialog>
@@ -48,7 +48,7 @@ const CheckAI = ({ offer }: { offer: OfferWithNotes }) => {
 const ResponseLoader = () => {
     return (
         <div className="flex flex-col gap-2">
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-gray-500">
                 <Sparkles className="w-4 h-4" /> AI is analyzing your resume...
             </p>
             <div className="flex items-center justify-center gap-2">
@@ -60,7 +60,7 @@ const ResponseLoader = () => {
 const Response = ({ response }: { response: string }) => {
     return (
         <div className="flex flex-col gap-2">
-            <p className="text-sm text-neutral-500">{response}</p>
+            <p className="text-sm text-gray-500">{response}</p>
         </div>
     )
 }

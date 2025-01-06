@@ -15,7 +15,7 @@ const DashboardPage = async () => {
                         <BookmarkCheckIcon className="w-5 h-5" />
                         Board
                     </h1>
-                    <p className="text-sm text-neutral-400">
+                    <p className="text-sm text-gray-400">
                         Manage your offers
                     </p>
                 </div>

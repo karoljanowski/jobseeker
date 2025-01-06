@@ -31,7 +31,7 @@ const OfferDateItem = ({ offerId, field, name, value }: OfferDateItemProps) => {
 
     return (
         <div className='flex flex-col gap-1'>
-            <span className='text-neutral-500 text-sm'>{name}</span>
+            <span className='text-gray-400 text-sm'>{name}</span>
             <DatePicker date={state.date} setDate={handleSave} pending={pending} />
         </div>
     )

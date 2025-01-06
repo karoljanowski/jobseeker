@@ -48,18 +48,18 @@ export default function AddFile() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="secondary">
+                <Button variant="default">
                     <Upload className="w-4 h-4 mr-2" />
                     Upload File
                 </Button>
             </DialogTrigger>
-            <DialogContent className="bg-neutral-900 border-neutral-800">
+            <DialogContent className="bg-gray-900 border-gray-800">
                 <DialogHeader>
                     <DialogTitle>Upload File</DialogTitle>
                 </DialogHeader>
                 <div className="grid place-items-center p-4">
                     <input ref={fileInput} type="file" className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-                    <div onClick={() => fileInput.current?.click()} className="flex flex-col items-center mb-4 gap-2 w-full px-4 py-6 border-2 border-dashed rounded-lg hover:bg-neutral-800 transition-all cursor-pointer">
+                    <div onClick={() => fileInput.current?.click()} className="flex flex-col items-center mb-4 gap-2 w-full px-4 py-6 border-2 border-dashed rounded-lg hover:bg-gray-800 transition-all cursor-pointer">
                         {
                             file ? (
                                 <>

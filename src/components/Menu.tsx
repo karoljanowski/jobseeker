@@ -20,7 +20,7 @@ const Menu = () => {
     }
 
     return (
-        <div className="flex gap-1 bg-neutral-950 backdrop-blur-xl rounded-lg px-4 py-3 mb-4">
+        <div className="flex gap-1 bg-gray-950/40 backdrop-blur-xl rounded-lg px-4 py-3 mb-4">
             <MenuItem title="Board" icon={<BookmarkCheckIcon className="w-5 h-5" />} href="/dashboard" />
             <MenuItem title="Stats" icon={<BarChartIcon className="w-5 h-5" />} href="/dashboard/stats" />
             <MenuItem title="Files" icon={<FileIcon className="w-5 h-5" />} href="/dashboard/files" />
@@ -47,7 +47,7 @@ interface MenuItemProps {
 const MenuItem = ({ title, icon, href, className }: MenuItemProps) => {
     const pathname = usePathname()
     return (
-        <Button variant={pathname === href ? 'secondary' : 'ghost'} className={cn("justify-start gap-3 px-4 py-2 h-7 rounded-md", className)} asChild>
+        <Button variant='ghost' size="sm" className={cn("justify-start gap-3", pathname === href ? 'text-purple-400 hover:text-purple-300 hover:bg-purple-500/10' : 'text-gray-400 hover:text-gray-300 hover:bg-gray-500/10', className)} asChild>
             <Link href={href}>
                 {icon}
                 {title}

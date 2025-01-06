@@ -57,11 +57,11 @@ const OfferItem = ({ offerId, field, name, value, editor = false }: OfferItemPro
 
     return (
         <div 
-            className='flex flex-col editor' 
+            className='flex flex-col' 
             onClick={() => setIsEditing(true)}
             ref={itemRef}
         >
-            <span className='text-neutral-500 text-sm'>{name}</span>
+            <span className='text-gray-400 text-sm'>{name}</span>
             {isEditing ? (
                 <div className='flex items-start flex-col gap-2 w-full'>
                     {editor ? (
@@ -71,7 +71,7 @@ const OfferItem = ({ offerId, field, name, value, editor = false }: OfferItemPro
                             <Input 
                                 value={editedValue} 
                                 onChange={(e) => setEditedValue(e.target.value)} 
-                                className='bg-neutral-900 w-full border-none text-white h-8' 
+                                className='bg-gray-800 w-full border-none text-white h-8' 
                             />
                             <div className="flex items-center gap-2">
                                 <Button variant="secondary" disabled={pending} className='h-7' onClick={handleSave}>Save</Button>

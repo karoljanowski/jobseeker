@@ -11,6 +11,7 @@ import AddOfferForm from './AddOfferForm'
 
 
 const initialForm: OfferFrom = {
+    accentColor: '#000000',
     company: '',
     position: '',
     description: '',
@@ -64,12 +65,12 @@ const AddOffer = () => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="secondary" className="">
+                <Button variant="default" className="">
                     <PlusIcon className="w-4 h-4" />
                     Add new
                 </Button>
             </DialogTrigger>
-            <DialogContent className='bg-neutral-950 border-neutral-900 w-full max-w-[1000px] overflow-y-auto max-h-[90vh]'>
+            <DialogContent className='bg-gray-900 border-gray-800 w-full max-w-[1000px] overflow-y-auto max-h-[90vh]'>
                 <DialogHeader>
                     <DialogTitle>Add new offer</DialogTitle>
                     <DialogDescription>Fill in the form to add a new offer</DialogDescription>

@@ -25,7 +25,7 @@ export default function LoginPage() {
     }, [state])
 
     return (
-        <Card className="w-[400px] bg-neutral-950 border-neutral-800">
+        <Card className="w-[400px] bg-gray-950 border-gray-800">
             <CardHeader>
                 <CardTitle className="text-2xl font-bold">Login</CardTitle>
             </CardHeader>
@@ -37,9 +37,9 @@ export default function LoginPage() {
                     <Button type="submit" className="w-full" disabled={pending} variant="secondary">
                         {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Login'}
                     </Button>
-                    <p className="text-sm text-center text-neutral-500">
+                    <p className="text-sm text-center text-gray-500">
                         Don't have an account?{' '}
-                        <Link href="/register" className="text-neutral-200 hover:underline">
+                        <Link href="/register" className="text-gray-200 hover:underline">
                             Register
                         </Link>
                     </p>

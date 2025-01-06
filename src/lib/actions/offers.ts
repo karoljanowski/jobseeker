@@ -1,7 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/prisma'
-import { AddOfferFormType, DeleteOfferFormType, OfferFrom } from '@/lib/types/offer'
+import { AddOfferFormType, OfferFrom } from '@/lib/types/offer'
 import { Offer, OfferStatus } from '@prisma/client'
 import { z } from 'zod'
 import { getUserId } from './auth'
@@ -16,6 +16,7 @@ export const getOffers = async () => {
             userId: userId
         }
     })    
+    console.log(offers)
     const columns = [
         {
             id: OfferStatus.OPEN,
@@ -35,19 +36,6 @@ export const getOffers = async () => {
     ]
 
     return columns
-}
-
-export const deleteOffer = async (prevState: DeleteOfferFormType, offerId: number) => {
-    try {   
-        await prisma.offer.delete({
-            where: {
-                id: offerId
-            }
-        })
-        return { success: true, error: null }
-    } catch (error) {
-        return { success: false, error: 'Error deleting offer' }
-    }
 }
 
 const addOfferSchema = z.object({

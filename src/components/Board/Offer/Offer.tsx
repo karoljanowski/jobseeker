@@ -7,12 +7,14 @@ import CheckAI from './CheckAI'
 import Source from './Source'
 import Tags from './Tags'
 import OfferDateItem from './OfferDateItem'
+import OfferDelete from './OfferDelete'
+import ColorPicker from './ColorPicker'
 
 const Offer = ({ offer }: { offer: OfferWithNotes }) => {
     return (
         <div className='grid grid-cols-[66%_33%] h-full w-full gap-4'>
             <MainInfo offer={offer} />
-            <div className='border-l border-neutral-800 pl-4'>
+            <div className='border-l border-gray-800 pl-4'>
                 <ColumnInfo offer={offer} />
             </div>
         </div>
@@ -35,13 +37,22 @@ const MainInfo = ({ offer }: { offer: OfferWithNotes }) => {
 }
 
 const ColumnInfo = ({ offer }: { offer: OfferWithNotes }) => {
-    const { source, status, expiresAt, dateAdded, file, tags } = offer
+    const { source, status, expiresAt, dateAdded, file, tags, location } = offer
     return (
         <div className='flex flex-col gap-2'>
-            <OfferStatus status={status} offerId={offer.id} />
-            <Source source={source} />
-            <OfferDateItem name='Expires At' value={expiresAt} offerId={offer.id} field='expiresAt' />
-            <OfferDateItem name='Date Added' value={dateAdded} offerId={offer.id} field='dateAdded' />
+            <div className="flex gap-2">
+                <OfferStatus status={status} offerId={offer.id} />
+                <OfferDelete offerId={offer.id} />
+            </div>
+            <div className="flex gap-2 *:flex-1">
+                <OfferDateItem name='Expires At' value={expiresAt} offerId={offer.id} field='expiresAt' />
+                <OfferDateItem name='Date Added' value={dateAdded} offerId={offer.id} field='dateAdded' />
+            </div>
+            <ColorPicker offerId={offer.id} value={offer.accentColor} />
+            <div className='flex gap-2 *:flex-1'>
+                <Source source={source} />
+                <OfferItem name='Location' value={location} offerId={offer.id} field='location' />
+            </div>
             <Tags tags={tags} offerId={offer.id} />
             <ResumeSelect selectedFile={file ? file : null} offerId={offer.id} />
             <CheckAI offer={offer} />

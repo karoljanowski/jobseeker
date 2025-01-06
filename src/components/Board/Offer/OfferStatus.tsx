@@ -32,7 +32,7 @@ const OfferStatus = ({ status, offerId }: { status: OfferStatusType, offerId: nu
 
     return (
         <Select value={state.status} onValueChange={handleChange}>
-            <SelectTrigger className='bg-neutral-900 hover:bg-neutral-800 transition-colors border-none focus:ring-offset-0'>
+            <SelectTrigger className='bg-gray-800 hover:bg-gray-700 transition-colors border-none focus:ring-offset-0 focus:ring-0'>
                 {pending ? 
                     <div className='flex items-center gap-2'>
                         <Loader2 className='w-4 h-4 animate-spin' />
@@ -41,11 +41,11 @@ const OfferStatus = ({ status, offerId }: { status: OfferStatusType, offerId: nu
                     : state.status.charAt(0).toUpperCase() + state.status.slice(1).toLowerCase()
                 }
             </SelectTrigger>
-            <SelectContent className='bg-neutral-900 border-none text-white'>
-                <SelectItem className="cursor-pointer hover:bg-neutral-800 transition-colors" value='OPEN'>Open</SelectItem>
-                <SelectItem className="cursor-pointer hover:bg-neutral-800 transition-colors" value='SENDED'>Sended</SelectItem>
-                <SelectItem className="cursor-pointer hover:bg-neutral-800 transition-colors" value='PROCESSING'>Processing</SelectItem>
-                <SelectItem className="cursor-pointer hover:bg-neutral-800 transition-colors" value='FINISHED'>Finished</SelectItem>
+            <SelectContent className='bg-gray-800 border-none text-white'>
+                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='OPEN'>Open</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='SENDED'>Sended</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='PROCESSING'>Processing</SelectItem>
+                <SelectItem className="cursor-pointer hover:bg-gray-700 transition-colors" value='FINISHED'>Finished</SelectItem>
             </SelectContent>
         </Select>
     )

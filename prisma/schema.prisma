@@ -9,6 +9,7 @@ datasource db {
 
 model Offer {
   id           Int         @id @default(autoincrement())
+  accentColor  String      @default("#0000FF")
   status       OfferStatus @default(OPEN)
   source       String
   fileId       Int?
