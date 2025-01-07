@@ -15,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Jobseeker",
-  description: "Jobseeker is a job board",
+  title: "Manage your job applications | Jobseeker",
+  description: "Manage your job applications, improve your resume with AI and get your dream job. You will never get lost in the process again.",
 };
 
 export default function RootLayout({
