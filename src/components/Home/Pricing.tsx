@@ -6,16 +6,15 @@ const Pricing = () => {
     const features = [
         "Kanban board for job applications",
         "AI-powered resume analysis",
-        "Kanban board",
         "File manager",
     ];
 
     return (
-        <div className="bg-gradient-to-b from-gray-950 to-gray-900 py-24">
+        <div className="bg-gradient-to-b from-gray-950 to-gray-900 py-16 md:py-24">
             <div className="container mx-auto px-4">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-12">
                     <MotionContainer
-                        className="text-left md:max-w-xl"
+                        className="text-center md:text-left md:max-w-xl"
                     >
                         <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
                             Early Access <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">Pricing</span>
