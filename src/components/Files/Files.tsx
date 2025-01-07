@@ -24,7 +24,7 @@ const Files = ({ files, onSelect, dialogMode = false }: FilesProps) => {
       <div className={`min-w-[600px] border-b border-gray-700 pb-4 grid items-center gap-4 px-4 ${dialogMode ? 'grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`}> 
         <div className="text-sm font-medium">Thumb</div>
         <div className="text-sm font-medium">File</div>
-        {!dialogMode && 'Offer' in files[0] && <div className="text-sm font-medium">Offers</div>}
+        {!dialogMode && files && files.some(file => 'Offer' in file) && <div className="text-sm font-medium">Offers</div>}
         <div className="text-sm font-medium">Size</div>
         <div className="text-sm font-medium">Format</div>
         <div className="text-sm font-medium">Added at</div>
@@ -87,7 +87,7 @@ const File = ({ file, onSelect, dialogMode }: { file: FileWithOffers | FileType,
         className="w-16 h-16 object-cover border border-gray-500 rounded-lg bg-white"
       />
       <p className="truncate">{file.publicId}</p>
-      {!dialogMode && 'Offer' in file && <FileOffers offers={file.Offer} />}
+      {!dialogMode && file && 'Offer' in file && <FileOffers offers={file.Offer} />}
       <p className="text-sm">{calculateFileSize(file.bytes)}</p>
       <p className="text-sm">{file.format || '-'}</p>
       <p className="text-sm">{file.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>

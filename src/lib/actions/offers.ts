@@ -16,7 +16,6 @@ export const getOffers = async () => {
             userId: userId
         }
     })    
-    console.log(offers)
     const columns = [
         {
             id: OfferStatus.SAVED,
@@ -76,7 +75,6 @@ export const addOffer = async (prevState: AddOfferFormType, offer: OfferFrom) =>
         })
         return { success: true, errors: null }
     } catch (error) {
-        console.error(error)
         return { success: false, errors: { other: 'Error adding offer' } }
     }
 }

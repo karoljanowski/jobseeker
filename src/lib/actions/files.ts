@@ -23,7 +23,6 @@ export const getFiles = async () => {
                 }
             }
         })
-        console.log(files[0].Offer)
         return { success: true, files }
     } catch (error) {
         console.error('Error fetching files:', error);
