@@ -26,4 +26,6 @@ export type OfferWithNotes = Offer & {
     file: File | null
 }
 
-export type OfferFrom = Omit<Offer, 'id' | 'dateAdded' | 'dateUpdated' | 'userId' | 'status' | 'user' | 'userId' | 'resume' | 'notes' | 'tags'>
+export type OfferFrom = Omit<Offer, 'id' | 'dateAdded' | 'dateUpdated' | 'userId' | 'status' | 'user' | 'userId' | 'notes' | 'fileId' | 'tags'> & {
+    file: File | null
+}

@@ -43,7 +43,9 @@ const addOfferSchema = z.object({
     expiresAt: z.date().refine(value => value.getTime() > Date.now(), { message: 'Expires at must be in the future' }),
     source: z.string().refine(value => value.length > 0, { message: 'Source is required' }),
     location: z.string().refine(value => value.length > 0, { message: 'Location is required' }),
-    fileId: z.number().nullable().optional(),
+    file: z.object({
+        id: z.number()
+    }).nullable().optional(),
     requirements: z.string().optional(),
     description: z.string().optional(),
 })
@@ -58,7 +60,7 @@ export const addOffer = async (prevState: AddOfferFormType, offer: OfferFrom) =>
     if(!parsedOffer.success){
         return { success: false, errors: parsedOffer.error.flatten().fieldErrors }
     }
-    const { company, position, description, expiresAt, source, location, fileId, requirements } = parsedOffer.data
+    const { company, position, description, expiresAt, source, location, file, requirements } = parsedOffer.data
     try {
         await prisma.offer.create({
             data: {
@@ -69,7 +71,7 @@ export const addOffer = async (prevState: AddOfferFormType, offer: OfferFrom) =>
                 expiresAt,
                 source,
                 location,
-                fileId,
+                fileId: file?.id,
                 userId: userId
             }
         })

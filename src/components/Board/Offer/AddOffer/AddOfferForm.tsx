@@ -1,15 +1,13 @@
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { OfferFrom } from "@/lib/types/offer"
 import { Dispatch, SetStateAction } from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import ResumeSelect from "../ResumeSelect"
 import GetFromLink from "./GetFromLink"
 import { AddOfferFormType } from "@/lib/types/offer"
 import LabelInput from "@/components/ui/labelInput"
 import Editor from "@/components/Editor"
 import { DatePicker } from "@/components/ui/date-picker"
+import ResumeSelect from "../ResumeSelect"
+import { File as FileType } from "@prisma/client"
 
 interface AddOfferFormProps {
     form: OfferFrom
@@ -17,10 +15,11 @@ interface AddOfferFormProps {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
     handleDateChange: (date: Date) => void,
     handleEditorChange: (content: string, name: string) => void
+    handleSelect: (file: FileType) => void
     errors: AddOfferFormType['errors']
 }
 
-const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, handleEditorChange, errors }: AddOfferFormProps) => {
+const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, handleEditorChange, handleSelect, errors }: AddOfferFormProps) => {
     return (
         <div className='grid grid-cols-2 gap-4'>
             <div className='flex flex-col col-span-2 border-b border-gray-800 pb-4'>
@@ -36,8 +35,8 @@ const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, hand
                 {errors?.expiresAt && <p className='text-red-500 text-xs'>{errors.expiresAt.join(', ')}</p>}
             </div>
             <div className='flex flex-col gap-2'>
-                <Label htmlFor='fileId'>File</Label>
-
+                <Label htmlFor='file'>Resume</Label>
+                <ResumeSelect selectedFile={form.file} handleSelect={handleSelect}/>
             </div>
             <div className='flex flex-col gap-2 col-span-2'>
                 <Label htmlFor='requirements'>Requirements</Label>

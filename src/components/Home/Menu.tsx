@@ -6,7 +6,6 @@ import MobileMenu from './MobileMenu';
 const Menu = () => {
 
   const menuItems = [
-    { label: 'Home', href: '/' },
     { label: 'How it works', href: '#how-it-works' },
     { label: 'Features', href: '#features' },
     { label: 'Pricing', href: '#pricing' },

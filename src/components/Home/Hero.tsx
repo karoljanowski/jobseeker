@@ -29,7 +29,7 @@ const Hero = () => {
                 </MotionContainer>
 
                 <div className="flex items-center justify-center mt-16 gap-4 rounded-t-xl overflow-hidden border-x-8 border-t-8 border-gray-700">
-                    <Image src="/hero.png" alt="Hero" width={1000} height={500} />
+                    <Image src="/hero.webp" alt="Hero" width={1000} height={500} />
                 </div>
             </div>
         </div>

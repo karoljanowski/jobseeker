@@ -51,7 +51,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
                     <DialogTitle>Get details from link</DialogTitle>
                 </DialogHeader>
                 <Input type='url' name='get-from-link' onChange={(e) => setLink(e.target.value)} className='bg-gray-950 border-gray-900' placeholder='for example: https://www.google.com' />
-                <Button disabled={loading} onClick={handleGetFromLink} className='bg-cyan-700 border-cyan-900'>
+                <Button disabled={loading} onClick={handleGetFromLink}>
                     {!loading ? 'Get details' : <Loader2 className='w-5 h-5 animate-spin'/>}
                 </Button>
             </DialogContent>

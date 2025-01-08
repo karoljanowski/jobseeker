@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { OfferFrom } from '@/lib/types/offer'
 import AddOfferForm from './AddOfferForm'
-
+import { File as FileType } from '@prisma/client'
 
 const initialForm: OfferFrom = {
     accentColor: '#000000',
@@ -17,7 +17,7 @@ const initialForm: OfferFrom = {
     description: '',
     expiresAt: new Date(new Date().setDate(new Date().getDate() + 7)),
     source: '',
-    fileId: null,
+    file: null,
     location: '',
     requirements: '',
 }
@@ -44,6 +44,10 @@ const AddOffer = () => {
 
     const handleEditorChange = (content: string, name: string) => {
         setForm({ ...form, [name]: content })
+    }
+
+    const handleSelect = (file: FileType) => {
+        setForm({ ...form, file: file })
     }
 
     useEffect(() => {
@@ -75,7 +79,7 @@ const AddOffer = () => {
                     <DialogTitle>Add new offer</DialogTitle>
                     <DialogDescription>Fill in the form to add a new offer</DialogDescription>
                 </DialogHeader>
-                <AddOfferForm form={form} setForm={setForm} errors={state.errors} handleDateChange={handleDateChange} handleInputChange={handleInputChange} handleEditorChange={handleEditorChange} />
+                <AddOfferForm form={form} setForm={setForm} errors={state.errors} handleDateChange={handleDateChange} handleInputChange={handleInputChange} handleEditorChange={handleEditorChange} handleSelect={handleSelect} />
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button className='h-8' variant="destructive">Cancel</Button>

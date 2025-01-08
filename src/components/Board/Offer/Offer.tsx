@@ -2,7 +2,7 @@ import Notes from './Notes'
 import { OfferWithNotes } from '@/lib/types/offer'
 import OfferItem from './OfferItem'
 import OfferStatus from './OfferStatus'
-import ResumeSelect from './ResumeSelect'
+import ResumeItem from './ResumeItem'
 import CheckAI from './CheckAI'
 import Source from './Source'
 import Tags from './Tags'
@@ -54,7 +54,10 @@ const ColumnInfo = ({ offer }: { offer: OfferWithNotes }) => {
                 <OfferItem name='Location' value={location} offerId={offer.id} field='location' />
             </div>
             <Tags tags={tags} offerId={offer.id} />
-            <ResumeSelect selectedFile={file ? file : null} offerId={offer.id} />
+            <div className='flex flex-col gap-1'>
+                <span className='text-gray-400 text-sm'>Resume</span>
+                <ResumeItem selectedFile={file ? file : null} offerId={offer.id} />
+            </div>
             <CheckAI offer={offer} />
         </div>
     )

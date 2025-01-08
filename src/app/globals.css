@@ -18,6 +18,10 @@ body {
   color: var(--foreground);
 }
 
+* {
+  scroll-behavior: smooth;
+}
+
 .editor ul, .editor ol {
   list-style-type: disc;
   margin-left: 1.5rem;

@@ -43,7 +43,7 @@ const Features = () => {
     ];
 
     return (
-        <div className="bg-gray-950 py-16 md:py-24">
+        <div id="features" className="bg-gray-950 py-16 md:py-24">
             <div className="container mx-auto px-4">
                 <MotionContainer
                     className="text-center mb-16"

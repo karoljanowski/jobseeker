@@ -10,7 +10,7 @@ const Pricing = () => {
     ];
 
     return (
-        <div className="bg-gradient-to-b from-gray-950 to-gray-900 py-16 md:py-24">
+        <div id="pricing" className="bg-gradient-to-b from-gray-950 to-gray-900 py-16 md:py-24">
             <div className="container mx-auto px-4">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-12">
                     <MotionContainer
