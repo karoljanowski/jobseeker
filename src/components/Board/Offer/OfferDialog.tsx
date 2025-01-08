@@ -42,13 +42,16 @@ const OfferDialog = () => {
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className='bg-gray-900 border-gray-800 w-full max-w-[1400px] overflow-y-auto h-[90vh] max-h-[800px] flex flex-col focus-visible:outline-none'>
+            <DialogContent className='bg-gray-900 border-gray-800 max-w-[1400px] overflow-y-auto h-[90vh] max-h-[800px] flex flex-col focus-visible:outline-none'>
                 <DialogHeader>
                     <DialogTitle>Offer Details</DialogTitle>
                 </DialogHeader>
-                <div className='flex h-full justify-center items-center'>
+                <div className='flex h-full justify-center w-full'>
                     {
-                        !loading && offer ? <Offer offer={offer} /> : <Loader2 className='animate-spin w-5 h-5' />
+                        !loading && offer ? <Offer offer={offer} /> : 
+                        <div className='flex h-full justify-center items-center'>
+                            <Loader2 className='animate-spin w-5 h-5' />
+                        </div>
                     }
                 </div>
             </DialogContent>

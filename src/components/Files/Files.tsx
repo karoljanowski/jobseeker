@@ -15,9 +15,10 @@ interface FilesProps {
   files: FileWithOffers[] | FileType[]
   onSelect?: (file: FileWithOffers | FileType) => void
   dialogMode?: boolean
+  loading?: boolean
 }
 
-const Files = ({ files, onSelect, dialogMode = false }: FilesProps) => {
+const Files = ({ files, onSelect, dialogMode = false, loading = false }: FilesProps) => {
   return (
     <div className="flex flex-col gap-4 w-full">
       {/* Header row */}
@@ -36,7 +37,8 @@ const Files = ({ files, onSelect, dialogMode = false }: FilesProps) => {
         {files.map((file) => (
           <File key={file.id} file={file} onSelect={onSelect ? onSelect : undefined} dialogMode={dialogMode} />
         ))}
-        {files.length === 0 && <div className="text-center text-sm text-gray-400">No files found</div>}
+        {files.length === 0 && !loading && <div className="text-center text-sm text-gray-400">No files found</div>}
+        {loading && <div className="flex justify-center items-center gap-2 py-10 text-sm text-gray-400"><Loader2 className="w-4 h-4 animate-spin" />Loading...</div>}
       </div>
     </div>
   )

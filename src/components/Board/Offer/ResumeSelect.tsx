@@ -15,14 +15,17 @@ interface ResumeItemProps {
 
 const ResumeItem = ({ selectedFile, handleSelect, pending=false }: ResumeItemProps) => {
     const [open, setOpen] = useState(false)
+    const [loadingFiles, setLoadingFiles] = useState(false)
     const [files, setFiles] = useState<FileType[]>([])
 
     useEffect(() => {
         const fetchFiles = async () => {
+            setLoadingFiles(true)
             const files = await getFiles()
             if (files.success && files.files) {
                 setFiles(files.files)
             }
+            setLoadingFiles(false)
         }
         if (open) {
             fetchFiles()
@@ -48,7 +51,7 @@ const ResumeItem = ({ selectedFile, handleSelect, pending=false }: ResumeItemPro
                     <DialogTitle>Select resume</DialogTitle>
                 </DialogHeader>
                 <div className='flex flex-col gap-2'>
-                    <Files files={files} onSelect={onSelect} dialogMode={true} />
+                    <Files files={files} onSelect={onSelect} dialogMode={true} loading={loadingFiles} />
                 </div>
             </DialogContent>
         </Dialog>

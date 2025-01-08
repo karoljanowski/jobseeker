@@ -11,7 +11,7 @@ export function Draggable({ id, offer }: { id: number, offer: Offer }) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: id,
   })
-  console.log(offer.accentColor)
+
   const style = {
     transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : 'translate3d(0px, 0px, 0px)',
     transition: transform ? undefined : 'all 0.2s ease-in-out',

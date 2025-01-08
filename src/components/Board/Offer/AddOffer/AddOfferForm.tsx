@@ -21,8 +21,8 @@ interface AddOfferFormProps {
 
 const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, handleEditorChange, handleSelect, errors }: AddOfferFormProps) => {
     return (
-        <div className='grid grid-cols-2 gap-4'>
-            <div className='flex flex-col col-span-2 border-b border-gray-800 pb-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div className='flex flex-col md:col-span-2 border-b border-gray-800 pb-4'>
                 <GetFromLink setForm={setForm} />
             </div>
             <LabelInput label='Company' placeholder='for example: Google' type='text' required name='company' value={form.company} onChange={handleInputChange} errors={errors?.company} />
@@ -38,7 +38,7 @@ const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, hand
                 <Label htmlFor='file'>Resume</Label>
                 <ResumeSelect selectedFile={form.file} handleSelect={handleSelect}/>
             </div>
-            <div className='flex flex-col gap-2 col-span-2'>
+            <div className='flex flex-col gap-2 md:col-span-2'>
                 <Label htmlFor='requirements'>Requirements</Label>
                 <Editor 
                     content={form.requirements || ''} 
@@ -46,7 +46,7 @@ const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, hand
                     placeholder='for example: - 3 years work with JavaScript - knowledge of React - knowledge of Next.js' 
                 />
             </div>
-            <div className='flex flex-col gap-2 col-span-2'>
+            <div className='flex flex-col gap-2 md:col-span-2'>
                 <Label htmlFor='description'>Description</Label>
                 <Editor 
                     content={form.description || ''} 

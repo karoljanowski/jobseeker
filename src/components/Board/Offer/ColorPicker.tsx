@@ -99,7 +99,6 @@ const ColorPicker = ({ offerId, value }: { offerId: number, value: string }) => 
     const [state, dispatch, pending] = useActionState(updateOfferColor, { color: value, success: false, error: null })
 
     const handleChange = (color: string) => {
-        console.log(color)
         startTransition(() => {
             dispatch({ offerId, color })
         })

@@ -19,7 +19,6 @@ const CheckAI = ({ offer }: { offer: OfferWithNotes }) => {
     useEffect(() => {
         if(state.success){
             toast.success('Resume analyzed')
-            console.log(state.response)
         }
     }, [state.success, state.response])
 

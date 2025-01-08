@@ -9,15 +9,35 @@ import Tags from './Tags'
 import OfferDateItem from './OfferDateItem'
 import OfferDelete from './OfferDelete'
 import ColorPicker from './ColorPicker'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import MediaQuery from 'react-responsive'
 
 const Offer = ({ offer }: { offer: OfferWithNotes }) => {
     return (
-        <div className='grid grid-cols-[66%_33%] h-full w-full gap-4'>
-            <MainInfo offer={offer} />
-            <div className='border-l border-gray-800 pl-4'>
-                <ColumnInfo offer={offer} />
-            </div>
-        </div>
+        <>
+            <MediaQuery minWidth={1200}>
+                    <div className='grid grid-cols-[66%_33%] h-full w-full gap-4'>
+                        <MainInfo offer={offer} />
+                    <div className='border-l border-gray-800 pl-4'>
+                        <ColumnInfo offer={offer} />
+                    </div>
+                </div>
+            </MediaQuery>
+            <MediaQuery maxWidth={1200}>
+                <Tabs defaultValue="main" className='w-full'>
+                    <TabsList className='grid w-full grid-cols-2 mb-6'>
+                        <TabsTrigger value="main">Main Info</TabsTrigger>
+                        <TabsTrigger value="settings">Settings</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="main">
+                        <MainInfo offer={offer} />
+                    </TabsContent>
+                    <TabsContent value="settings">
+                        <ColumnInfo offer={offer} />
+                    </TabsContent>
+                </Tabs>
+            </MediaQuery>
+        </>
     )
 }
 

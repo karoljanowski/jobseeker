@@ -4,12 +4,12 @@ const HowItWork = () => {
     const steps = [
         {
             title: 'Create an account',
-            description: 'Get started in seconds. Sign up and set up your profile to begin your job search journey.',
+            description: 'Get started in seconds. Sign up and start your job search journey.',
             icon: '👤'
         },
         {
             title: 'Add your job opportunities',
-            description: 'Track all your applications in one place. Never miss a follow-up or deadline again.',
+            description: 'Track all your applications in one place. Never get lost in your job applications.',
             icon: '📝'
         },
         {
@@ -19,7 +19,7 @@ const HowItWork = () => {
         },
         {
             title: 'Get your dream job',
-            description: 'Land interviews and offers with a polished application process and optimized resume.',
+            description: 'Land your ideal job with the help of Jobseeker. You will find the perfect fit for your skills and aspirations.',
             icon: '🎯'
         },
     ];
