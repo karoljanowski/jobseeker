@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useActionState, startTransition, useRef } from "react"
+import { useEffect, useState, useActionState, startTransition, useRef, useCallback } from "react"
 import { updateOfferField } from '@/lib/actions/singleOffer'
 import { toast } from 'react-hot-toast'
 import Editor from '@/components/Editor'
@@ -27,10 +27,10 @@ const OfferItem = ({ offerId, field, name, value, editor = false }: OfferItemPro
         })
     }
 
-    const handleCancel = () => {
+    const handleCancel = useCallback(() => {
         setIsEditing(false)
         setEditedValue(state.value)
-    }
+    }, [state.value])
 
     useEffect(() => {
         if (state.success) {
@@ -53,7 +53,7 @@ const OfferItem = ({ offerId, field, name, value, editor = false }: OfferItemPro
         return () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
-      }, [])
+    }, [handleCancel])
 
     return (
         <div 

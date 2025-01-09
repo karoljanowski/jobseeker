@@ -1,32 +1,32 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Sparkles, InfoIcon, Loader2 } from "lucide-react"
 import { resumeAnaize } from "@/lib/actions/resumeAnaize"
 import { OfferWithNotes } from "@/lib/types/offer"
-import { startTransition, useActionState, useEffect, useState } from "react"
+import { startTransition, useActionState, useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
 const CheckAI = ({ offer }: { offer: OfferWithNotes }) => {
     const [open, setOpen] = useState(false)
     const [state, dispatch, pending] = useActionState(resumeAnaize, {success: false, error: null, response: ''})
 
-    const handleCheck = () => {
+    const handleCheck = useCallback(() => {
         startTransition(() => {
             dispatch(offer)
         })
-    }
+    }, [dispatch, offer])
 
     useEffect(() => {
         if(state.success){
             toast.success('Resume analyzed')
         }
-    }, [state.success, state.response])
+    }, [state])
 
     useEffect(() => {
         if(open){
             handleCheck()
         }
-    }, [open])
+    }, [open, handleCheck])
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

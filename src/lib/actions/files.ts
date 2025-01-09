@@ -169,6 +169,7 @@ export const deleteFile = async (prevState: { success: boolean, error: string | 
         });
         return { success: true, error: null }
     } catch (error) {
+        console.error("Delete file error:", error);
         return { success: false, error: "Failed to delete file" }
     }
 }

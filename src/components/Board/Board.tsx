@@ -5,7 +5,7 @@ import { DndContext, closestCorners, PointerSensor, useSensor, useSensors, DragE
 import { restrictToWindowEdges } from '@dnd-kit/modifiers'
 import { Droppable } from './Droppable'
 import { updateOfferStatus } from '@/lib/actions/offers'
-import { Offer, OfferStatus } from '@prisma/client'
+import { OfferStatus } from '@prisma/client'
 import toast from 'react-hot-toast'
 import { Column } from '@/lib/types/board'
 
@@ -84,7 +84,7 @@ const Board = ({ offers }: { offers: Column[] }) => {
                         toast.error('Error updating offer status')
                     }
                 } catch (error) {
-                    toast.error('Error updating offer status')
+                    toast.error('Error updating offer status: ' + error)
                     setOptimisticColumns(columns)
                 }
             })

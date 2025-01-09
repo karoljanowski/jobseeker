@@ -41,7 +41,7 @@ const Editor = ({ content, onUpdate, onCancel, onSave, disabled, placeholder }: 
     return () => {
         document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [])
+  }, [onCancel])
 
   if (!editor) {
     return null

@@ -1,12 +1,14 @@
 import AddOffer from '@/components/Board/Offer/AddOffer/AddOffer';
-import Board from '@/components/Board/Board';
-import { getOffers } from '../../lib/actions/offers';
 import { Suspense } from 'react';
 import OfferDialog from '@/components/Board/Offer/OfferDialog';
 import { BookmarkCheckIcon } from 'lucide-react';
 import Loader from '@/components/Loader';
+import { getOffers } from '@/lib/actions/offers';
+import Board from '@/components/Board/Board';
 
-const DashboardPage = async () => {
+export const dynamic = 'force-dynamic'
+
+const DashboardPage = () => {
     return (
         <div className="flex flex-col gap-2 h-full">
             <div className="flex justify-between items-center mb-4">

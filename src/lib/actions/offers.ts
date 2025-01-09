@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma'
 import { AddOfferFormType, OfferFrom } from '@/lib/types/offer'
-import { Offer, OfferStatus } from '@prisma/client'
+import { OfferStatus } from '@prisma/client'
 import { z } from 'zod'
 import { getUserId } from './auth'
 
@@ -77,6 +77,7 @@ export const addOffer = async (prevState: AddOfferFormType, offer: OfferFrom) =>
         })
         return { success: true, errors: null }
     } catch (error) {
+        console.error("Add offer error:", error);
         return { success: false, errors: { other: 'Error adding offer' } }
     }
 }
@@ -100,6 +101,7 @@ export const updateOfferStatus = async (offerId: number, newStatus: OfferStatus)
         })
         return { success: true, errors: null }
     } catch (error) {   
+        console.error("Update offer status error:", error);
         return { success: false, errors: null }
     }
 }

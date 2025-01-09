@@ -22,7 +22,7 @@ export default function LoginPage() {
         }else if (state.errors?.credentials) {
             toast.error(state.errors.credentials)
         }
-    }, [state])
+    }, [state, router])
 
     return (
         <Card className="w-[400px] bg-gray-950 border-gray-800">
@@ -38,7 +38,7 @@ export default function LoginPage() {
                         {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Login'}
                     </Button>
                     <p className="text-sm text-center text-gray-500">
-                        Don't have an account?{' '}
+                        Don&apos;t have an account?{' '}
                         <Link href="/register" className="text-gray-200 hover:underline">
                             Register
                         </Link>

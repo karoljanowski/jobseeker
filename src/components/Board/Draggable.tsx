@@ -1,6 +1,5 @@
 'use client'
 import { useDraggable } from '@dnd-kit/core'
-import { CSS } from '@dnd-kit/utilities'
 import { Card, CardHeader, CardTitle, CardDescription } from '../ui/card'
 import { Offer } from '@prisma/client'
 import { ClockIcon } from 'lucide-react'

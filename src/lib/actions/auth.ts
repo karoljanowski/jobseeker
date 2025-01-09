@@ -3,7 +3,7 @@
 import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcrypt"
-import { SignJWT, decodeJwt, jwtVerify } from "jose"
+import { SignJWT, jwtVerify } from "jose"
 import { cookies } from "next/headers"
 import { LoginState, RegisterState } from "../types/auth"
 

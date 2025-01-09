@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRightIcon, EyeIcon, Loader2, Trash2Icon } from "lucide-react"
+import { EyeIcon, Loader2, Trash2Icon } from "lucide-react"
 import { Button } from "../ui/button"
 import Image from "next/image"
 import { startTransition, useActionState, useEffect } from "react"
@@ -74,7 +74,7 @@ const File = ({ file, onSelect, dialogMode }: { file: FileWithOffers | FileType,
     }else if (state.error) {
       toast.error(state.error);
     }
-  }, [state]);
+  }, [state, router]);
 
   return (
     <div 

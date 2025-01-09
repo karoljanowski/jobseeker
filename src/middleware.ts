@@ -29,6 +29,7 @@ export async function middleware(request: NextRequest) {
         await jwtVerify(token, new TextEncoder().encode(JWT_SECRET_KEY))
         return NextResponse.next()
     } catch (error) {
+        console.error("JWT verification error:", error);
         return NextResponse.redirect(new URL('/login', request.url))
     }
 }

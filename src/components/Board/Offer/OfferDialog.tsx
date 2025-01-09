@@ -2,11 +2,10 @@
     
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../ui/dialog'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { getOffer } from '@/lib/actions/singleOffer'
-import { toast } from 'react-hot-toast'
 import Offer from './Offer'
-import { Loader, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { OfferWithNotes } from '@/lib/types/offer'
 
 const OfferDialog = () => {
@@ -17,14 +16,14 @@ const OfferDialog = () => {
     const offerId = searchParams?.get('offer')
     const [offer, setOffer] = useState<OfferWithNotes | null>(null)
 
-    const getData = async () => {
+    const getData = useCallback(async () => {
         setLoading(true)
         const offer = await getOffer(Number(offerId))
         if(offer){
             setOffer(offer)
         }
         setLoading(false)
-    }
+    }, [offerId])
 
     useEffect(() => {
         if(offerId){
@@ -33,7 +32,7 @@ const OfferDialog = () => {
         } else {
             setOpen(false)
         }
-    }, [offerId])
+    }, [offerId, getData])
 
     const handleClose = () => {
         setOpen(false)

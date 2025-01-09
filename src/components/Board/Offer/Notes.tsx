@@ -1,9 +1,8 @@
 import Editor from "@/components/Editor"
-import { Button } from "@/components/ui/button"
 import { addNote, deleteNote, editNote } from "@/lib/actions/notes"
 import { Note as NoteType } from "@prisma/client"
 import { Loader2 } from "lucide-react"
-import { useState, useRef, useEffect, useTransition } from "react"
+import { useState, useTransition } from "react"
 import { toast } from "react-hot-toast"
 
 interface NotesProps {

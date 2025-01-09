@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { updateOfferTags } from "@/lib/actions/singleOffer";
 import { Loader2, X, Plus } from "lucide-react";
-import { startTransition, useActionState, useEffect, useState, useRef } from "react";
+import { startTransition, useActionState, useState, useRef } from "react";
 
 
 const Tags = ({ tags, offerId }: { tags: string[], offerId: number }) => {

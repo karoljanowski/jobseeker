@@ -16,6 +16,7 @@ export const addNote = async (data: { content: string, offerId: number }) => {
         })
         return { success: true, error: null, newNote: newNote }
     } catch (error) {
+        console.error("Add note error:", error);
         return { success: false, error: 'Failed to add note' }
     }
 }
@@ -30,6 +31,7 @@ export const deleteNote = async (noteId: string) => {
             error: null 
         }
     } catch (error) {
+        console.error("Delete note error:", error);
         return { success: false, error: 'Failed to delete note' }
     }
 }
@@ -46,6 +48,7 @@ export const editNote = async (data: { id: string, content: string }) => {
             error: null 
         }
     } catch (error) {
+        console.error("Edit note error:", error);
         return { success: false, error: 'Failed to update note' }
     }
 }

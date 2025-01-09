@@ -43,7 +43,7 @@ export default function AddFile() {
                 setOpen(false);
             }, 500);
         }
-    }, [state]);
+    }, [state, router]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

@@ -1,9 +1,11 @@
 import AddFile from "@/components/Files/AddFile";
-import { FileIcon, Loader2 } from "lucide-react";
+import { FileIcon } from "lucide-react";
 import Files from "@/components/Files/Files";
 import { getFiles } from "@/lib/actions/files";
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
+
+export const dynamic = 'force-dynamic'
 
 const FilesPage = () => {
     return (

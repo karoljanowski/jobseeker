@@ -9,7 +9,7 @@ interface LabelInputProps {
     type: string;
     required: boolean;
     className?: string;
-    errors: any;
+    errors?: string[];
     value?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

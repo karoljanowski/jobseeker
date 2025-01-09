@@ -5,6 +5,7 @@ import { useActionState, useEffect } from "react"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { startTransition } from "react"
+
 const OfferDelete = ({ offerId }: { offerId: number }) => {
     const router = useRouter()
     const [state, dispatch, pending] = useActionState(deleteOffer, { success: false, error: null })
@@ -23,7 +24,7 @@ const OfferDelete = ({ offerId }: { offerId: number }) => {
         }else if(state.error){
             toast.error(state.error)
         }
-    }, [state.success, state.error])
+    }, [state, router])
 
     return (
         <Button variant="ghost" onClick={handleDelete} size="icon" className="hover:bg-red-500 hover:text-white">

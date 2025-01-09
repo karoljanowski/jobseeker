@@ -2,8 +2,6 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useActionState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "react-hot-toast"
@@ -23,7 +21,7 @@ export default function RegisterPage() {
         }else if (state.errors) {
             toast.error('Check form for errors and try again')
         }
-    }, [state])
+    }, [state, router])
 
     return (
         <Card className="w-[400px] bg-gray-950 border-gray-800">
