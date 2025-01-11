@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useOptimistic, startTransition } from 'react'
-import { DndContext, closestCorners, PointerSensor, TouchSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core'
+import { DndContext, closestCorners, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core'
 import { restrictToWindowEdges } from '@dnd-kit/modifiers'
 import { Droppable } from './Droppable'
 import { updateOfferStatus } from '@/lib/actions/offers'
