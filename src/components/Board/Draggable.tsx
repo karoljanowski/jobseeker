@@ -4,11 +4,14 @@ import { Card, CardHeader, CardTitle, CardDescription } from '../ui/card'
 import { Offer } from '@prisma/client'
 import { ClockIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useMediaQuery } from 'react-responsive'
 
 export function Draggable({ id, offer }: { id: number, offer: Offer }) {
   const router = useRouter()
+  const isMobile = useMediaQuery({ maxWidth: 767 })
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: id,
+    disabled: isMobile,
   })
 
   const style = {
@@ -22,7 +25,7 @@ export function Draggable({ id, offer }: { id: number, offer: Offer }) {
   }
 
   return (
-    <Card onClick={handleClick} ref={setNodeRef} style={style} className="bg-gray-900 text-white cursor-move rounded-lg border-none hover:brightness-150" {...listeners} {...attributes}>
+    <Card onClick={handleClick} ref={setNodeRef} style={style} className="bg-gray-900 text-white lg:cursor-move rounded-lg border-none hover:brightness-150" {...listeners} {...attributes}>
         <CardHeader>
             <CardTitle className="flex justify-between items-start">
                 <span>{offer.company}</span>

@@ -21,7 +21,7 @@ export function DatePicker({date, setDate, pending = false}: {date: Date, setDat
           {pending ? <><Loader2 className="w-4 h-4 animate-spin" /> Changing date...</> : 
           <>
             <CalendarIcon /> 
-            {date ? format(date, "PPP") : <span>Pick a date</span>}
+            {date ? format(date, "d MMM yyyy") : <span>Pick a date</span>}
           </>}
 
         </Button>

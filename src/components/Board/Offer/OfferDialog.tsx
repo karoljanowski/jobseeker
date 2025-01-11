@@ -41,7 +41,7 @@ const OfferDialog = () => {
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className='bg-gray-900 border-gray-800 max-w-[1400px] overflow-y-auto h-[90vh] max-h-[800px] flex flex-col focus-visible:outline-none'>
+            <DialogContent className='bg-gray-900 border-gray-800 max-w-[1400px] overflow-y-auto h-[90dvh] max-h-[800px] flex flex-col focus-visible:outline-none'>
                 <DialogHeader>
                     <DialogTitle>Offer Details</DialogTitle>
                 </DialogHeader>

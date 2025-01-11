@@ -1,15 +1,17 @@
 'use client'
 
-import { EyeIcon, Loader2, Trash2Icon } from "lucide-react"
+import { EyeIcon, Loader2, Trash2Icon, ArrowLeft, ArrowRight } from "lucide-react"
 import { Button } from "../ui/button"
 import Image from "next/image"
-import { startTransition, useActionState, useEffect } from "react"
+import { startTransition, useActionState, useEffect, useState } from "react"
 import { deleteFile } from "@/lib/actions/files"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { FileWithOffers } from "@/lib/types/files"
 import { File as FileType } from "@prisma/client"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { AnimatePresence, motion } from "framer-motion"
+import { useMediaQuery } from "react-responsive"
 
 interface FilesProps {
   files: FileWithOffers[] | FileType[]
@@ -19,10 +21,25 @@ interface FilesProps {
 }
 
 const Files = ({ files, onSelect, dialogMode = false, loading = false }: FilesProps) => {
+  const isMobile = useMediaQuery({ maxWidth: 800 })
+  const [showArrowSign, setShowArrowSign] = useState(false)
+
+  useEffect(() => {
+    const showArrowSign = localStorage.getItem('showArrowSign')
+    if (showArrowSign === null && isMobile) {
+      setShowArrowSign(true)
+    }
+  }, [])
+
+  const handleClose = () => {
+    localStorage.setItem('showArrowSign', 'true')
+    setShowArrowSign(false)
+  }
+
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-4 w-full overflow-x-auto" onScroll={handleClose}>
       {/* Header row */}
-      <div className={`min-w-[600px] border-b border-gray-700 pb-4 grid items-center gap-4 px-4 ${dialogMode ? 'grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`}> 
+      <div className={`min-w-[800px] border-b border-gray-700 pb-4 grid items-center gap-4 px-4 ${dialogMode ? 'grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`}> 
         <div className="text-sm font-medium">Thumb</div>
         <div className="text-sm font-medium">File</div>
         {!dialogMode && files && files.some(file => 'Offer' in file) && <div className="text-sm font-medium">Offers</div>}
@@ -33,7 +50,8 @@ const Files = ({ files, onSelect, dialogMode = false, loading = false }: FilesPr
       </div>
 
       {/* File rows */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 relative">
+        <ArrowSign showArrowSign={showArrowSign} />
         {files.map((file) => (
           <File key={file.id} file={file} onSelect={onSelect ? onSelect : undefined} dialogMode={dialogMode} />
         ))}
@@ -78,7 +96,7 @@ const File = ({ file, onSelect, dialogMode }: { file: FileWithOffers | FileType,
 
   return (
     <div 
-      className={`min-w-[600px] grid items-center gap-4 px-4 py-2 rounded-lg transition-colors even:bg-gray-800/50 ${dialogMode ? 'hover:bg-gray-800/80 cursor-pointer grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`} 
+      className={`min-w-[800px] grid items-center gap-4 px-4 py-2 rounded-lg transition-colors even:bg-gray-800/50 ${dialogMode ? 'hover:bg-gray-800/80 cursor-pointer grid-cols-[80px_1fr_100px_100px_120px]' : 'grid-cols-[80px_1fr_120px_100px_100px_120px_60px]'}`} 
       onClick={() => onSelect?.(file)}
     >
       <Image 
@@ -103,6 +121,30 @@ const File = ({ file, onSelect, dialogMode }: { file: FileWithOffers | FileType,
   )
 }
 
+const ArrowSign = ({ showArrowSign }: { showArrowSign: boolean }) => {
+  return (
+    <AnimatePresence>
+      {showArrowSign && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="absolute top-0 left-0 w-full h-[50svh] flex items-center justify-center"
+        >
+          <div className="bg-gray-950/90 p-8 rounded-lg flex flex-col items-center justify-center gap-2">
+            <div className="flex items-center gap-2">
+              <ArrowLeft className="w-8 h-8 text-gray-200" />
+              <ArrowRight className="w-8 h-8 text-gray-200" />
+            </div>
+            <div className="text-gray-200 text-sm">Scroll horizontally to see more details</div>
+        </div>
+      </motion.div>
+    )}
+    </AnimatePresence>
+  )
+}
+
 const FileOffers = ({ offers }: { offers: FileWithOffers['Offer'] }) => {
   return (
     <Popover>
@@ -111,7 +153,7 @@ const FileOffers = ({ offers }: { offers: FileWithOffers['Offer'] }) => {
           <EyeIcon className="w-4 h-4 text-gray-400" /> Offers
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] bg-gray-700 border-none text-white">
+      <PopoverContent className="min-w-[200px] max-w-[400px] mx-4 bg-gray-700 border-none text-white">
         <div className="flex flex-col gap-2">
           {offers.length > 0 && offers.map((offer) => (
             <div key={offer.id} className="flex flex-col border-b border-gray-700 pb-2 last:border-none">

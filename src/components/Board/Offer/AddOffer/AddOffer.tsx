@@ -73,7 +73,7 @@ const AddOffer = () => {
                     Add new
                 </Button>
             </DialogTrigger>
-            <DialogContent className='bg-gray-900 border-gray-800 max-w-[1000px] overflow-y-auto max-h-[90vh]'>
+            <DialogContent className='bg-gray-900 border-gray-800 max-w-[1000px] overflow-y-auto max-h-[90dvh]'>
                 <DialogHeader>
                     <DialogTitle>Add new offer</DialogTitle>
                     <DialogDescription>Fill in the form to add a new offer</DialogDescription>

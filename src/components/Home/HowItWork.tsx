@@ -25,7 +25,7 @@ const HowItWork = () => {
     ];
 
     return (
-        <div id="how-it-works" className="bg-gray-950 relative">
+        <div id="how-it-works" className="bg-gray-950 relative overflow-hidden">
             <div className="absolute inset-0 before:absolute before:-left-72 top-0 before:w-[800px] before:h-[800px] before:bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] before:from-gray-800/30 before:via-gray-800/10 before:to-transparent before:blur-2xl" />
             
             <div className="container mx-auto px-4 py-16 md:py-24 relative">
