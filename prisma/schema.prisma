@@ -11,6 +11,7 @@ model Offer {
   id           Int         @id @default(autoincrement())
   accentColor  String      @default("#1E3A8A")
   status       OfferStatus @default(SAVED)
+  finishedStatus FinishedStatus @default(NOT_FINISHED)
   source       String
   fileId       Int?
   file         File?      @relation(fields: [fileId], references: [id])
@@ -55,6 +56,17 @@ enum OfferStatus {
   SENT
   INTERVIEW
   FINISHED
+}
+
+enum FinishedStatus {
+  NOT_FINISHED
+  NO_RESPONSE
+  HR_REJECTED
+  TECHNICAL_REJECTED
+  HOME_ASSIGNMENT_REJECTED
+  FINAL_REJECTED
+  OFFER_DECLINED
+  OFFER_ACCEPTED
 }
 
 model Note {

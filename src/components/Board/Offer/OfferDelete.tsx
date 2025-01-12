@@ -27,7 +27,7 @@ const OfferDelete = ({ offerId }: { offerId: number }) => {
     }, [state, router])
 
     return (
-        <Button variant="ghost" onClick={handleDelete} size="icon" className="hover:bg-red-500 hover:text-white">
+        <Button variant="ghost" onClick={handleDelete} size="icon" className="hover:bg-red-500 hover:text-white min-w-8">
             {pending ? <Loader2Icon className="w-4 h-4 animate-spin" /> : <TrashIcon className="w-4 h-4" />}
         </Button>
     )

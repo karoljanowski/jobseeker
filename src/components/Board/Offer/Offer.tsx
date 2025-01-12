@@ -1,7 +1,7 @@
 import Notes from './Notes'
 import { OfferWithNotes } from '@/lib/types/offer'
 import OfferItem from './OfferItem'
-import OfferStatus from './OfferStatus'
+import OfferStatuses from './OfferStatuses/OfferStatuses'
 import ResumeItem from './ResumeItem'
 import CheckAI from './CheckAI'
 import Source from './Source'
@@ -57,11 +57,11 @@ const MainInfo = ({ offer }: { offer: OfferWithNotes }) => {
 }
 
 const ColumnInfo = ({ offer }: { offer: OfferWithNotes }) => {
-    const { source, status, expiresAt, dateAdded, file, tags, location } = offer
+    const { source, expiresAt, dateAdded, file, tags, location } = offer
     return (
         <div className='flex flex-col gap-2'>
-            <div className="flex gap-2">
-                <OfferStatus status={status} offerId={offer.id} />
+            <div className="flex items-end gap-2">
+                <OfferStatuses offer={offer} />
                 <OfferDelete offerId={offer.id} />
             </div>
             <div className="flex gap-2 *:flex-1">
