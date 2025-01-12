@@ -11,7 +11,7 @@ const statuses = ['SAVED', 'SENT', 'INTERVIEW', 'FINISHED'] as const
 const finishedStatuses = ['NOT_FINISHED', 'NO_RESPONSE', 'HR_REJECTED', 'TECHNICAL_REJECTED', 'HOME_ASSIGNMENT_REJECTED', 'FINAL_REJECTED', 'OFFER_DECLINED', 'OFFER_ACCEPTED'] as const
 
 const OfferStatuses = ({ offer }: { offer: OfferWithNotes }) => {
-    const [isFinishedDialogOpen, setIsFinishedDialogOpen] = useState(true)
+    const [isFinishedDialogOpen, setIsFinishedDialogOpen] = useState(false)
     const [isFinishedDisabled, setIsFinishedDisabled] = useState(offer.status !== 'FINISHED')
 
     const [state, dispatch, pending] = useActionState(updateOfferStatus, {
