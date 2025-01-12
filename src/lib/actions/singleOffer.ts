@@ -31,7 +31,7 @@ type UpdateStatusPayload = {
 
 export async function updateOfferStatus(prevState: { status: OfferStatus; finishedStatus: FinishedStatus; success: boolean; error: string | null }, data: UpdateStatusPayload) {
   try {
-    let dataToUpdate: { status?: OfferStatus; finishedStatus?: FinishedStatus } = {}
+    const dataToUpdate: { status?: OfferStatus; finishedStatus?: FinishedStatus } = {}
 
     if(data.status){
         dataToUpdate.status = data.status
