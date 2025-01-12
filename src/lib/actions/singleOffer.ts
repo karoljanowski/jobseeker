@@ -23,34 +23,42 @@ export async function getOffer(id: number) {
     }
 }
 
-export const updateOfferStatus = async (prevState: { status: OfferStatus | FinishedStatus, success: boolean, error: string | null }, data: { id: number, status: OfferStatus | FinishedStatus, finishedStatus?: boolean }) => {
-    try {
-        let dataToUpdate: { name: string | null, value: OfferStatus | FinishedStatus | null } = {
-            name: null,
-            value: null
-        }
+type UpdateStatusPayload = {
+  id: number;
+  status?: OfferStatus;
+  finishedStatus?: FinishedStatus;
+};
 
-        if(data.finishedStatus) {
-            dataToUpdate.name = 'finishedStatus'
-            dataToUpdate.value = data.status
-        } else if(data.finishedStatus === false) {
-            dataToUpdate.name = 'status'
-            dataToUpdate.value = data.status
-        }
+export async function updateOfferStatus(prevState: { status: OfferStatus; finishedStatus: FinishedStatus; success: boolean; error: string | null }, data: UpdateStatusPayload) {
+  try {
+    let dataToUpdate: { status?: OfferStatus; finishedStatus?: FinishedStatus } = {}
 
-        if(dataToUpdate.name === null || dataToUpdate.value === null) {
-            return { status: prevState.status, success: false, error: 'Failed to update offer status' }
-        }
+    if(data.status){
+        dataToUpdate.status = data.status
+    }
+    if(data.finishedStatus){
+        dataToUpdate.finishedStatus = data.finishedStatus
+    }
 
-        await prisma.offer.update({
-            where: { id: data.id },
-            data: { 
-                [dataToUpdate.name]: dataToUpdate.value
-            }
-        })
-        return { status: data.status, success: true, error: null }
+    if(!dataToUpdate.status && !dataToUpdate.finishedStatus){
+        return { ...prevState, success: false, error: 'Failed to update status' }
+    }
+
+    const updatedOffer = await prisma.offer.update({
+        where: { 
+            id: data.id 
+        },
+        data: dataToUpdate
+    });
+    
+    return {
+        status: updatedOffer.status,
+        finishedStatus: updatedOffer.finishedStatus,
+        success: true,
+        error: null
+    };
     } catch (error) {
-        return { status: prevState.status, success: false, error: error instanceof Error ? error.message : 'Error updating offer status' }
+        return {...prevState, success: false, error: error instanceof Error ? error.message : 'Failed to update status'}
     }
 }
 
