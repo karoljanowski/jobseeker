@@ -3,6 +3,7 @@
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart"
 import { Bar, BarChart, YAxis, XAxis, LabelList } from "recharts"
 import { FinishedStatusStats } from "@/lib/types/stats"
+import NoData from "./NoData"
 
 interface FinishedStatusChartProps {
     stats: FinishedStatusStats[]
@@ -46,6 +47,10 @@ const FinishedStatusChart = ({ stats }: FinishedStatusChartProps) => {
     const chartData = stats.map((stat) => ({
         finishedStatus: stat.finishedStatus, offers: stat._count.finishedStatus, fill: `var(--color-${stat.finishedStatus})`
     }))
+
+    if (chartData.length === 0) {
+        return <NoData />
+    }
 
     return (
         <ChartContainer config={chartConfig} style={{ height: chartData.length * 50 }} className="w-full -mt-2">

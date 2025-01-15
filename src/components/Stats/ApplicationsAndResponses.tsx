@@ -4,6 +4,7 @@ import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTool
 import { Pie, PieChart, LabelList, Label } from "recharts"
 import { useMediaQuery } from "react-responsive"
 import { ApplicationResponseStats } from "@/lib/types/stats"
+import NoData from "./NoData"
 
 interface ApplicationsAndResponsesProps {
     stats: ApplicationResponseStats
@@ -29,6 +30,10 @@ const ApplicationsAndResponses = ({ stats }: ApplicationsAndResponsesProps) => {
             color: 'hsl(var(--chart-2))'
         }
     } satisfies ChartConfig
+
+    if (stats.sentWithoutResponse === 0 && stats.sentWithResponse === 0) {
+        return <NoData />
+    }
 
     return (
         <ChartContainer config={chartConfig} className="h-[400px] -mb-[150px] -mt-[80px] md:-mt-[40px] w-full">

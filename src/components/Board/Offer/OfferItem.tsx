@@ -57,7 +57,7 @@ const OfferItem = ({ offerId, field, name, value, editor = false }: OfferItemPro
 
     return (
         <div 
-            className='flex flex-col' 
+            className={`flex flex-col ${editor ? 'editor' : ''}`} 
             onClick={() => setIsEditing(true)}
             ref={itemRef}
         >
