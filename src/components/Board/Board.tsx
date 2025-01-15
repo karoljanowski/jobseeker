@@ -8,6 +8,7 @@ import { updateOfferStatus } from '@/lib/actions/offers'
 import { OfferStatus } from '@prisma/client'
 import toast from 'react-hot-toast'
 import { Column } from '@/lib/types/board'
+import { useRouter } from 'next/navigation'
 
 const initialColumns: Column[] = [
     {
@@ -24,10 +25,16 @@ const initialColumns: Column[] = [
         id: OfferStatus.INTERVIEW,
         title: 'Interview',
         offers: []
+    },
+    {
+        id: OfferStatus.FINISHED,
+        title: 'Finished',
+        offers: []
     }
 ]
 
 const Board = ({ offers }: { offers: Column[] }) => {
+    const router = useRouter()
     const [columns, setColumns] = useState<Column[]>(initialColumns)
     const [optimisticColumns, setOptimisticColumns] = useOptimistic(
         columns,
@@ -45,6 +52,7 @@ const Board = ({ offers }: { offers: Column[] }) => {
     const handleDragEnd = async (event: DragEndEvent) => {
         const { active, over } = event
 
+        
         if (over && active.id !== over.id) {
             const prevColumns = optimisticColumns
             const activeColumn = prevColumns.find(col => col.offers.some(offer => offer.id === active.id))
@@ -56,6 +64,11 @@ const Board = ({ offers }: { offers: Column[] }) => {
             const activeOffer = activeColumn.offers.find(offer => offer.id === active.id)
 
             if (!activeOffer) return
+
+            if (over && over.id === OfferStatus.FINISHED) {
+                handleDragToFinished(activeOffer.id)
+                return
+            }
 
             const updatedColumns = prevColumns.map(col => {
                 if (col.id === overColumn.id) {
@@ -91,9 +104,13 @@ const Board = ({ offers }: { offers: Column[] }) => {
         }
     }
 
+    const handleDragToFinished = (id: number) => {
+        router.push(`/dashboard?offer=${id}&finishedDialog=true`)
+    }
+
     return (
         <DndContext id="board" sensors={sensors} collisionDetection={closestCorners} onDragEnd={handleDragEnd} modifiers={[restrictToWindowEdges]}>
-            <div className="grid grid-rows-auto xl:grid-cols-3 xl:grid-rows-1 gap-4 w-full h-full">
+            <div className="grid grid-rows-auto xl:grid-cols-4 xl:grid-rows-1 gap-4 w-full h-full">
                 {optimisticColumns.map((column) => (
                     <Droppable key={column.id} id={column.id} column={column} />
                 ))}

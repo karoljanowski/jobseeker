@@ -5,6 +5,8 @@ import { updateOfferFile } from "@/lib/actions/singleOffer"
 import { File as FileType } from "@prisma/client"
 import { useEffect } from "react"
 import toast from "react-hot-toast"
+import { Button } from "@/components/ui/button"
+import { EyeIcon } from "lucide-react"
 
 interface ResumeItemProps {
     offerId: number
@@ -29,7 +31,16 @@ const ResumeItem = ({ offerId, selectedFile }: ResumeItemProps) => {
     }, [state])
 
     return (
-        <ResumeSelect selectedFile={state.selectedFile} handleSelect={handleSelect} pending={pending} />
+        <div className="flex items-center gap-2 w-full">
+            <ResumeSelect selectedFile={state.selectedFile} handleSelect={handleSelect} pending={pending} />
+            <Button disabled={!state.selectedFile} variant="secondary" size="icon" onClick={() => {
+                if(state.selectedFile){
+                    window.open(state.selectedFile.fileUrl, '_blank')
+                }
+            }}>
+                <EyeIcon className="w-4 h-4" />
+            </Button>
+        </div>
     )
 }
 

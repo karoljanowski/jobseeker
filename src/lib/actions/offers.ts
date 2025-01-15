@@ -31,6 +31,11 @@ export const getOffers = async () => {
             id: OfferStatus.INTERVIEW,
             title: 'Interview',
             offers: offers.filter(offer => offer.status === OfferStatus.INTERVIEW)
+        },
+        {
+            id: OfferStatus.FINISHED,
+            title: 'Finished',
+            offers: offers.filter(offer => offer.status === OfferStatus.FINISHED)
         }
     ]
 
@@ -92,12 +97,16 @@ export const updateOfferStatus = async (offerId: number, newStatus: OfferStatus)
     if(!parsedOffer.success){
         return { success: false, errors: parsedOffer.error.flatten().fieldErrors }
     }
+
     try {
         await prisma.offer.update({
             where: {  
                 id: offerId
             },
-            data: { status: newStatus }
+            data: { 
+                status: newStatus,
+                ...(newStatus !== OfferStatus.FINISHED ? { finishedStatus: 'NOT_FINISHED' } : {})
+            }
         })
         return { success: true, errors: null }
     } catch (error) {   

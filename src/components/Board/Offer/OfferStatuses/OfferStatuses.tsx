@@ -6,12 +6,15 @@ import toast from "react-hot-toast"
 import { updateOfferStatus } from "@/lib/actions/singleOffer"
 import { OfferStatus as OfferStatusType, FinishedStatus as FinishedStatusType } from "@prisma/client"
 import FinishedDialog from "./FinishedDialog"
+import { useSearchParams } from "next/navigation"
 
 const statuses = ['SAVED', 'SENT', 'INTERVIEW', 'FINISHED'] as const
 const finishedStatuses = ['NOT_FINISHED', 'NO_RESPONSE', 'HR_REJECTED', 'TECHNICAL_REJECTED', 'HOME_ASSIGNMENT_REJECTED', 'FINAL_REJECTED', 'OFFER_DECLINED', 'OFFER_ACCEPTED'] as const
 
 const OfferStatuses = ({ offer }: { offer: OfferWithNotes }) => {
-    const [isFinishedDialogOpen, setIsFinishedDialogOpen] = useState(false)
+    const searchParams = useSearchParams()
+    const finishedDialog = searchParams?.get('finishedDialog')
+    const [isFinishedDialogOpen, setIsFinishedDialogOpen] = useState(finishedDialog === 'true')
     const [isFinishedDisabled, setIsFinishedDisabled] = useState(offer.status !== 'FINISHED')
 
     const [state, dispatch, pending] = useActionState(updateOfferStatus, {

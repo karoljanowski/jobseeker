@@ -29,7 +29,7 @@ const Files = ({ files, onSelect, dialogMode = false, loading = false }: FilesPr
     if (showArrowSign === null && isMobile) {
       setShowArrowSign(true)
     }
-  }, [])
+  }, [isMobile])
 
   const handleClose = () => {
     localStorage.setItem('showArrowSign', 'true')

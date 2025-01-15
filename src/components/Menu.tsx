@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "./ui/button"
-import { BookmarkCheckIcon, FileIcon, SettingsIcon, LogOutIcon, BarChartIcon, MenuIcon, LucideBriefcaseBusiness } from "lucide-react"
+import { BookmarkCheckIcon, FileIcon, LogOutIcon, BarChartIcon, MenuIcon, LucideBriefcaseBusiness } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { logout } from "@/lib/actions/auth"
@@ -26,7 +26,6 @@ const Menu = () => {
         { title: 'Board', icon: <BookmarkCheckIcon className="w-5 h-5" />, href: '/dashboard' },
         { title: 'Stats', icon: <BarChartIcon className="w-5 h-5" />, href: '/dashboard/stats' },
         { title: 'Files', icon: <FileIcon className="w-5 h-5" />, href: '/dashboard/files' },
-        { title: 'Settings', icon: <SettingsIcon className="w-5 h-5" />, href: '/dashboard/settings' },
     ]
 
     return (

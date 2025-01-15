@@ -13,7 +13,7 @@ interface ResumeItemProps {
     pending?: boolean
 }
 
-const ResumeItem = ({ selectedFile, handleSelect, pending=false }: ResumeItemProps) => {
+const ResumeSelect = ({ selectedFile, handleSelect, pending=false }: ResumeItemProps) => {
     const [open, setOpen] = useState(false)
     const [loadingFiles, setLoadingFiles] = useState(false)
     const [files, setFiles] = useState<FileType[]>([])
@@ -40,7 +40,7 @@ const ResumeItem = ({ selectedFile, handleSelect, pending=false }: ResumeItemPro
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="secondary">
+                <Button variant="secondary" className="w-full">
                     {pending ? <div>Loading...</div> : selectedFile ?
                      <div className='flex items-center gap-2'><FileIcon className='w-4 h-4' />{selectedFile.publicId}</div> 
                      : <div className='flex items-center gap-2'><FileIcon className='w-4 h-4' />Select resume</div>}
@@ -58,4 +58,4 @@ const ResumeItem = ({ selectedFile, handleSelect, pending=false }: ResumeItemPro
     )
 }
 
-export default ResumeItem
+export default ResumeSelect
