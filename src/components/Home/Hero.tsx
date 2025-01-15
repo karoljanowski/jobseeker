@@ -20,11 +20,11 @@ const Hero = () => {
                     delay={0.2}
                     className="flex items-center justify-center mt-8 gap-4"
                 >
-                    <Button>
-                        <Link className="w-full" href="#how-it-works">How it works</Link>
+                    <Button className="p-0">
+                        <Link className="px-4 py-2" href="#how-it-works">How it works</Link>
                     </Button>
-                    <Button variant="secondary">
-                        <Link className="w-full" href="/register">Try for free</Link>
+                    <Button variant="secondary" className="p-0">
+                        <Link className="px-4 py-2" href="/register">Try for free</Link>
                     </Button>
                 </MotionContainer>
 

@@ -1,7 +1,7 @@
 import MotionContainer from "./MotionContainer";
 import { Check } from "lucide-react";
 import { Button } from "../ui/button";
-
+import Link from "next/link";
 const Pricing = () => {
     const features = [
         "Kanban board for job applications",
@@ -40,8 +40,8 @@ const Pricing = () => {
                                         <span className="text-5xl font-bold text-white">$0</span>
                                         <span className="text-gray-400">/month</span>
                                     </div>
-                                    <Button variant="secondary" className="w-full">
-                                        Start Free Trial
+                                    <Button variant="secondary" className="w-full p-0">
+                                        <Link className="px-4 py-2" href="/register">Start Free Trial</Link>
                                     </Button>
                                 </div>
 

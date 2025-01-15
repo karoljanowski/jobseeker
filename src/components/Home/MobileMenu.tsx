@@ -22,12 +22,12 @@ const MobileMenu = ({ menuItems }: { menuItems: { label: string; href: string }[
                 </SheetHeader>
                 <div className="flex flex-col gap-2 mt-6">
                 {menuItems.map((item) => (
-                    <Button variant="ghost" key={item.href} className="w-full justify-start hover:bg-gray-800/80 hover:text-white">
-                        <Link onClick={() => setOpen(false)} className="w-full" href={item.href}>{item.label}</Link>
+                    <Button variant="ghost" key={item.href} className="w-full justify-start hover:bg-gray-800/80 hover:text-white p-0">
+                        <Link onClick={() => setOpen(false)} className="px-4 py-2" href={item.href}>{item.label}</Link>
                     </Button>
                 ))}
-                <Button variant="secondary" className="w-full mt-4">
-                    <Link className="w-full" href="/register">Try for free</Link>
+                <Button variant="secondary" className="w-full mt-4 p-0">
+                    <Link className="px-4 py-2" href="/register">Try for free</Link>
                 </Button>
                 </div>
             </SheetContent>

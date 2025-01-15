@@ -24,15 +24,15 @@ const Menu = () => {
 
           <div className="hidden md:flex gap-6">
             {menuItems.map((item) => (
-              <Button variant="ghost" size="sm" key={item.href} className="hover:bg-gray-800/80 hover:text-white">
-                <Link href={item.href}>{item.label}</Link>
+              <Button variant="ghost" size="sm" key={item.href} className="hover:bg-gray-800/80 hover:text-white p-0">
+                <Link className="px-4 py-2" href={item.href}>{item.label}</Link>
               </Button>
             ))}
           </div>
 
           <div className="hidden md:block">
-            <Button variant="secondary" size="sm">
-              <Link href="/register">Try for free</Link>
+            <Button variant="secondary" size="sm" className="p-0">
+              <Link className="px-4 py-2" href="/register">Try for free</Link>
             </Button>
           </div>
 
