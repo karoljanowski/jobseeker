@@ -27,7 +27,7 @@ const AddOfferForm = ({ form, setForm, handleInputChange, handleDateChange, hand
             </div>
             <LabelInput label='Company' placeholder='for example: Google' type='text' required name='company' value={form.company} onChange={handleInputChange} errors={errors?.company} />
             <LabelInput label='Position' placeholder='for example: Software Engineer' type='text' required name='position' value={form.position} onChange={handleInputChange} errors={errors?.position} />
-            <LabelInput label='Source' placeholder='for example: LinkedIn' type='text' required name='source' value={form.source} onChange={handleInputChange} errors={errors?.source} />
+            <LabelInput label='Source' placeholder='for example: LinkedIn or link to offer' type='text' required name='source' value={form.source} onChange={handleInputChange} errors={errors?.source} />
             <LabelInput label='Location' placeholder='for example: Remote' type='text' required name='location' value={form.location} onChange={handleInputChange} errors={errors?.location} />
             <div className='flex flex-col gap-2'>
                 <Label htmlFor='expiresAt'>Expires at</Label>

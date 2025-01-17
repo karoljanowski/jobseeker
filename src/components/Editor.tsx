@@ -29,6 +29,12 @@ const Editor = ({ content, onUpdate, onCancel, onSave, disabled, placeholder }: 
   })
 
   useEffect(() => {
+    if (editor) {
+      editor.commands.setContent(content)
+    }
+  }, [content, editor])
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
         if (editorRef.current && !editorRef.current.contains(event.target as Node)) {
             if (onCancel) {
