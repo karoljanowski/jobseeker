@@ -3,6 +3,34 @@
 import { openai } from "@/lib/openai"
 import { load } from "cheerio"
 import { ScraperResponse } from "@/lib/types/scraper"
+import { prisma } from "../prisma"
+
+export const setLastGptUsage = async (userId: number) => {
+    await prisma.user.update({
+        where: {
+            id: userId
+        },
+        data: {
+            lastGptUsage: new Date()
+        }
+    })
+}
+
+export const getLastGptUsage = async (userId: number) => {
+    try {   
+        const lastGptUsage = await prisma.user.findUnique({
+            where: {
+                id: userId
+        },
+        select: {
+                lastGptUsage: true
+            }
+        })
+        return { success: true, lastGptUsage: lastGptUsage?.lastGptUsage }
+    } catch (error) {
+        return { success: false, error: "Error getting last GPT usage" }
+    }
+}
 
 export const getHTMLFromLink = async (link: string) => {
     try {
@@ -32,11 +60,11 @@ export const getHTMLFromLink = async (link: string) => {
         return { success: true, data: cleanText }
     } catch (error) {
         console.error("Error getting HTML from link:", error);
-        return { success: false, error: "Error getting HTML from link" }
+        return { success: false, error: "Failed to get content from link" }
     }
 }
 
-export const scrapOfferData = async (html: string): Promise<ScraperResponse> => {
+export const scrapOfferData = async (html: string, userId: number): Promise<ScraperResponse> => {
     console.log("HTML:", html)
 
     if (!html) {
@@ -121,6 +149,7 @@ export const scrapOfferData = async (html: string): Promise<ScraperResponse> => 
             return { success: false, error: "Failed to get offer data" }
           }
           const data = JSON.parse(response.choices[0].message.content)
+          await setLastGptUsage(userId)
           return { success: true, data }
     } catch (error) {
         console.error("Error scraping offer data:", error);

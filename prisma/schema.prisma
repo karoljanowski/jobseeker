@@ -49,6 +49,7 @@ model User {
   password String
   offers   Offer[]
   files  File[]
+  lastGptUsage DateTime?
 }
 
 enum OfferStatus {
