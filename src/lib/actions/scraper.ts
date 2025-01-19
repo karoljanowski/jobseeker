@@ -27,7 +27,7 @@ export const getLastGptUsage = async (userId: number) => {
             }
         })
         return { success: true, lastGptUsage: lastGptUsage?.lastGptUsage }
-    } catch (error) {
+    } catch {
         return { success: false, error: "Error getting last GPT usage" }
     }
 }
@@ -58,15 +58,12 @@ export const getHTMLFromLink = async (link: string) => {
         $("audio").remove()
         const cleanText = $('body').text().replace(/\s+/g, ' ').trim()
         return { success: true, data: cleanText }
-    } catch (error) {
-        console.error("Error getting HTML from link:", error);
+    } catch {
         return { success: false, error: "Failed to get content from link" }
     }
 }
 
 export const scrapOfferData = async (html: string, userId: number): Promise<ScraperResponse> => {
-    console.log("HTML:", html)
-
     if (!html) {
         return { success: false, error: "Failed to get content from link" }
     }
@@ -151,8 +148,7 @@ export const scrapOfferData = async (html: string, userId: number): Promise<Scra
           const data = JSON.parse(response.choices[0].message.content)
           await setLastGptUsage(userId)
           return { success: true, data }
-    } catch (error) {
-        console.error("Error scraping offer data:", error);
+    } catch {
         return { success: false, error: "Error scraping offer data" }
     }
 
