@@ -3,26 +3,21 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import LabelInput from "@/components/ui/labelInput"
-import { useRouter } from "next/navigation"
 import { toast } from "react-hot-toast"
-import { login } from "@/lib/actions/auth"
+import { login } from "@/lib/auth/authActions"
 import Link from "next/link"
 import { useActionState } from "react"
 import { useEffect } from "react"
 import { Loader2 } from "lucide-react"
 
 export default function LoginPage() {
-    const [state, formAction, pending] = useActionState(login, { success: false, errors: null })
-    const router = useRouter()
+    const [state, formAction, pending] = useActionState(login, { errors: { email: undefined, password: undefined, credentials: undefined } })
 
     useEffect(() => {
-        if (state.success) {
-            router.push('/dashboard')
-            toast.success('Logged in successfully')
-        }else if (state.errors?.credentials) {
+        if (state?.errors?.credentials) {
             toast.error(state.errors.credentials)
         }
-    }, [state, router])
+    }, [state])
 
     return (
         <Card className="w-[400px] bg-gray-950 border-gray-800">
@@ -31,8 +26,8 @@ export default function LoginPage() {
             </CardHeader>
             <CardContent>
                 <form action={formAction} className="space-y-4">
-                    <LabelInput name="email" label="Email" placeholder="name@example.com" type="email" required errors={state.errors?.email} />
-                    <LabelInput name="password" label="Password" placeholder="********" type="password" required errors={state.errors?.password} />
+                    <LabelInput name="email" label="Email" placeholder="name@example.com" type="email" required errors={state?.errors?.email} />
+                    <LabelInput name="password" label="Password" placeholder="********" type="password" required errors={state?.errors?.password} />
 
                     <Button type="submit" className="w-full" disabled={pending} variant="secondary">
                         {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Login'}

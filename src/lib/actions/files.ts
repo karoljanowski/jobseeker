@@ -2,7 +2,7 @@
 
 import { cloudinary } from '../cloudinary'
 import { prisma } from '../prisma'
-import { getUserId } from './auth'
+import { getUserId } from '../auth/authActions'
 
 export const getFiles = async () => {
     const userId = await getUserId()

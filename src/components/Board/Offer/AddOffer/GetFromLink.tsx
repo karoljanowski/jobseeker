@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { OfferFrom } from "@/lib/types/offer";
 import { getHTMLFromLink, getLastGptUsage, scrapOfferData } from "@/lib/actions/scraper";
-import { getUserId } from "@/lib/actions/auth";
+import { getUserId } from "@/lib/auth/authActions";
 
 type LoadingState = 'false' | 'first' | 'second'
 

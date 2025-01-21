@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { AddOfferFormType, OfferFrom } from '@/lib/types/offer'
 import { OfferStatus } from '@prisma/client'
 import { z } from 'zod'
-import { getUserId } from './auth'
+import { getUserId } from '../auth/authActions'
 
 export const getOffers = async () => {
     const userId = await getUserId()

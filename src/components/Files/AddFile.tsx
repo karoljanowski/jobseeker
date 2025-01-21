@@ -42,6 +42,8 @@ export default function AddFile() {
             setTimeout(() => {
                 setOpen(false);
             }, 500);
+        } else if (state.error) {
+            toast.error(state.error)
         }
     }, [state, router]);
 

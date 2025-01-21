@@ -1,5 +1,4 @@
 export type LoginState = {
-    success: boolean
     errors: {
         email?: string[]
         password?: string[]
@@ -8,7 +7,6 @@ export type LoginState = {
 }
 
 export type RegisterState = {
-    success: boolean
     errors: {
         email?: string[]
         password?: string[]

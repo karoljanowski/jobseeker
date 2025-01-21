@@ -1,41 +1,21 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-import { jwtVerify } from 'jose'
+import { cookies } from "next/headers"
+import { type NextRequest, NextResponse } from "next/server"
+import { decrypt } from "./lib/auth/session"
 
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
-if (!JWT_SECRET_KEY) {
-    throw new Error('JWT_SECRET_KEY is not set')
+export default async function middleware(req: NextRequest) {
+    const protectedRoutes = ['/dashboard']
+    const currentPath = req.nextUrl.pathname
+    const isProtectedRoute = protectedRoutes.includes(currentPath)
+
+    if (isProtectedRoute) {
+        const cookieStore = await cookies()
+        const cookie = cookieStore.get('session')?.value
+        const session = await decrypt(cookie)
+
+        if (!session?.userId) {
+            return NextResponse.redirect(new URL('/login', req.nextUrl))
+        }
+    }
+
+    return NextResponse.next()
 }
-
-// Add paths that don't require authentication
-const publicPaths = ['/login', '/register', '/']
-
-export async function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl
-    
-    // Allow public paths
-    if (publicPaths.includes(pathname)) {
-        return NextResponse.next()
-    }
-
-    // Check for auth token
-    const token = request.cookies.get('token')?.value
-
-    if (!token) {
-        return NextResponse.redirect(new URL('/login', request.url))
-    }
-
-    try {
-        await jwtVerify(token, new TextEncoder().encode(JWT_SECRET_KEY))
-        return NextResponse.next()
-    } catch (error) {
-        console.error("JWT verification error:", error);
-        return NextResponse.redirect(new URL('/login', request.url))
-    }
-}
-
-export const config = {
-    matcher: [
-        '/((?!_next/static|_next/image|favicon.ico|.*\\..*|api).*)',
-    ],
-} 

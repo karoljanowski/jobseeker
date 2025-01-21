@@ -3,23 +3,17 @@
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { BookmarkCheckIcon, FileIcon, LogOutIcon, BarChartIcon, MenuIcon, LucideBriefcaseBusiness } from "lucide-react"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { logout } from "@/lib/actions/auth"
-import { toast } from "react-hot-toast"
+import { logout } from "@/lib/auth/authActions"
 import { Sheet, SheetHeader, SheetContent, SheetTrigger, SheetTitle } from "./ui/sheet"
 import { useState } from "react"
 
 const Menu = () => {
-    const router = useRouter()
     const pathname = usePathname()
 
     const handleLogout = async () => {
-        const response = await logout()
-        if (response.success) {
-            router.push('/login')
-            toast.success('Logged out successfully')
-        }
+        await logout()
     }
 
     const menuItems = [
