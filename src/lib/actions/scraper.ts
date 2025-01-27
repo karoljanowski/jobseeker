@@ -36,7 +36,7 @@ export const getHTMLFromLink = async (link: string) => {
     try {
         const response = await fetch(link)
         if (!response.ok) {
-            console.error("Failed to fetch content from link:", response.statusText)
+            console.error("Failed to fetch content from link:", response)
             return { success: false, error: "Failed to get content from link" }
         }
         const html = await response.text()
