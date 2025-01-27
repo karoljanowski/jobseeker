@@ -36,6 +36,7 @@ export const getHTMLFromLink = async (link: string) => {
     try {
         const response = await fetch(link)
         if (!response.ok) {
+            console.error("Failed to fetch content from link:", response.statusText)
             return { success: false, error: "Failed to get content from link" }
         }
         const html = await response.text()
@@ -58,7 +59,8 @@ export const getHTMLFromLink = async (link: string) => {
         $("audio").remove()
         const cleanText = $('body').text().replace(/\s+/g, ' ').trim()
         return { success: true, data: cleanText }
-    } catch {
+    } catch (error) {
+        console.error("Error fetching HTML from link:", error)
         return { success: false, error: "Failed to get content from link" }
     }
 }
