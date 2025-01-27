@@ -33,51 +33,30 @@ export const getLastGptUsage = async (userId: number) => {
     }
 }
 
-export const getCleanHTMLFromLink = async (link: string) => {
+export const getHTMLFromLink = async (link: string) => {
     try {
-        // You can use a proxy service like this
         const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(link)}`;
-        
         const response = await axios.get(proxyUrl);
 
-        if (!response.data?.contents) {
-            console.error("Failed to fetch content from link");
+        if (response.status === 403) {
+            return { success: false, error: "We don't have access to this website" };
+        }
+
+        if (response.status !== 200) {
             return { success: false, error: "Failed to get content from link" };
         }
 
         const $ = load(response.data.contents);
 
-        // Remove unwanted elements
-        $('script, style, iframe, form, header, footer, nav, aside, button, input, select, a, img, video, audio').remove();
+        $('script, style, iframe, form, header, footer, head, nav, aside, button, input, select, a, img, video, audio').remove();
 
-        // Get the cleaned HTML
         const cleanHTML = $.html();
 
         return { success: true, data: cleanHTML };
-    } catch (error) {
-        console.error("Error fetching and cleaning HTML from link:", error instanceof Error ? error.message : "Unknown error");
+    } catch {
         return { success: false, error: "Failed to get content from link" };
     }
 }
-
-// export const getFullHTMLFromLink = async (link: string) => {
-//     try {
-//         const browser = await puppeteer.launch({
-//             args: ['--no-sandbox', '--disable-setuid-sandbox'],
-//         });
-//         const page = await browser.newPage();
-//         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
-//         await page.goto(link, { waitUntil: 'networkidle2' });
-
-//         const html = await page.content();
-//         await browser.close();
-
-//         return { success: true, data: html };
-//     } catch (error) {
-//         console.error("Error fetching full HTML from link using Puppeteer:", error instanceof Error ? error.message : "Unknown error");
-//         return { success: false, error: "Failed to get full content from link" };
-//     }
-// }
 
 export const scrapOfferData = async (html: string, userId: number): Promise<ScraperResponse> => {
     if (!html) {
