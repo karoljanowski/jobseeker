@@ -9,7 +9,7 @@ import { Dispatch } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { OfferFrom } from "@/lib/types/offer";
-import { getHTMLFromLink, getLastGptUsage, scrapOfferData } from "@/lib/actions/scraper";
+import { getCleanHTMLFromLink, getLastGptUsage, scrapOfferData } from "@/lib/actions/scraper";
 import { getUserId } from "@/lib/auth/authActions";
 
 type LoadingState = 'false' | 'first' | 'second'
@@ -38,7 +38,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
             return
         }
     
-        const htmlContent = await getHTMLFromLink(link);
+        const htmlContent = await getCleanHTMLFromLink(link);
         if (!htmlContent?.success || !htmlContent.data) {
             toast.error(htmlContent?.error);
             setLoading('false'); 

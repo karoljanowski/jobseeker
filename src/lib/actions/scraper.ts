@@ -4,6 +4,7 @@ import { openai } from "@/lib/openai"
 import { load } from "cheerio"
 import { ScraperResponse } from "@/lib/types/scraper"
 import { prisma } from "../prisma"
+import axios from 'axios'
 
 export const setLastGptUsage = async (userId: number) => {
     await prisma.user.update({
@@ -32,43 +33,52 @@ export const getLastGptUsage = async (userId: number) => {
     }
 }
 
-export const getHTMLFromLink = async (link: string) => {
+export const getCleanHTMLFromLink = async (link: string) => {
     try {
-        const response = await fetch(link, {
+        const response = await axios.get(link, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
             }
-        })
+        });
 
-        if (!response.ok) {
-            console.error("Failed to fetch content from link:", response.status, response.statusText)
-            return { success: false, error: "Failed to get content from link" }
+        if (response.status !== 200) {
+            console.error("Failed to fetch content from link:", response.status, response.statusText);
+            return { success: false, error: "Failed to get content from link" };
         }
-        const html = await response.text()
 
-        const $ = load(html)
-        $("script").remove()
-        $("style").remove()
-        $("iframe").remove()
-        $("form").remove()
-        $("header").remove()
-        $("footer").remove()
-        $("nav").remove()
-        $("aside").remove()
-        $("button").remove()
-        $("input").remove()
-        $("select").remove()
-        $("a").remove()
-        $("img").remove()
-        $("video").remove()
-        $("audio").remove()
-        const cleanText = $('body').text().replace(/\s+/g, ' ').trim()
-        return { success: true, data: cleanText }
+        const $ = load(response.data);
+
+        // Remove unwanted elements
+        $('script, style, iframe, form, header, footer, nav, aside, button, input, select, a, img, video, audio').remove();
+
+        // Get the cleaned HTML
+        const cleanHTML = $.html();
+
+        return { success: true, data: cleanHTML };
     } catch (error) {
-        console.error("Error fetching HTML from link:", error instanceof Error ? error.message : "Unknown error")
-        return { success: false, error: "Failed to get content from link" }
+        console.error("Error fetching and cleaning HTML from link:", error instanceof Error ? error.message : "Unknown error");
+        return { success: false, error: "Failed to get content from link" };
     }
 }
+
+// export const getFullHTMLFromLink = async (link: string) => {
+//     try {
+//         const browser = await puppeteer.launch({
+//             args: ['--no-sandbox', '--disable-setuid-sandbox'],
+//         });
+//         const page = await browser.newPage();
+//         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
+//         await page.goto(link, { waitUntil: 'networkidle2' });
+
+//         const html = await page.content();
+//         await browser.close();
+
+//         return { success: true, data: html };
+//     } catch (error) {
+//         console.error("Error fetching full HTML from link using Puppeteer:", error instanceof Error ? error.message : "Unknown error");
+//         return { success: false, error: "Failed to get full content from link" };
+//     }
+// }
 
 export const scrapOfferData = async (html: string, userId: number): Promise<ScraperResponse> => {
     if (!html) {
