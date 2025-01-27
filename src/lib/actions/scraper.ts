@@ -4,6 +4,7 @@ import { openai } from "@/lib/openai"
 import { load } from "cheerio"
 import { ScraperResponse } from "@/lib/types/scraper"
 import { prisma } from "../prisma"
+import axios from 'axios'
 
 export const setLastGptUsage = async (userId: number) => {
     await prisma.user.update({
@@ -34,37 +35,26 @@ export const getLastGptUsage = async (userId: number) => {
 
 export const getHTMLFromLink = async (link: string) => {
     try {
-        const response = await fetch(link, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-            }
-        })
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(link)}`;
+        const response = await axios.get(proxyUrl);
 
-        if (!response.ok) {
-            return { success: false, error: "Failed to get content from link" }
+        if (response.status === 403) {
+            return { success: false, error: "We don't have access to this website" };
         }
-        const html = await response.text()
 
-        const $ = load(html)
-        $("script").remove()
-        $("style").remove()
-        $("iframe").remove()
-        $("form").remove()
-        $("header").remove()
-        $("footer").remove()
-        $("nav").remove()
-        $("aside").remove()
-        $("button").remove()
-        $("input").remove()
-        $("select").remove()
-        $("a").remove()
-        $("img").remove()
-        $("video").remove()
-        $("audio").remove()
-        const cleanText = $('body').text().replace(/\s+/g, ' ').trim()
-        return { success: true, data: cleanText }
+        if (response.status !== 200) {
+            return { success: false, error: "Failed to get content from link" };
+        }
+
+        const $ = load(response.data.contents);
+
+        $('script, style, iframe, form, header, footer, head, nav, aside, button, input, select, a, img, video, audio').remove();
+
+        const cleanHTML = $.html();
+
+        return { success: true, data: cleanHTML };
     } catch {
-        return { success: false, error: "Failed to get content from link" }
+        return { success: false, error: "Failed to get content from link" };
     }
 }
 
