@@ -40,10 +40,10 @@ export const getHTMLFromLink = async (link: string) => {
             }
         })
         console.log("Response Status:", response.status)
-        console.log("Response Headers:", response.headers)
+        console.log("Response Headers:", JSON.stringify([...response.headers]))
 
         if (!response.ok) {
-            console.error("Failed to fetch content from link:", response)
+            console.error("Failed to fetch content from link:", response.status, response.statusText)
             return { success: false, error: "Failed to get content from link" }
         }
         const html = await response.text()
@@ -67,7 +67,7 @@ export const getHTMLFromLink = async (link: string) => {
         const cleanText = $('body').text().replace(/\s+/g, ' ').trim()
         return { success: true, data: cleanText }
     } catch (error) {
-        console.error("Error fetching HTML from link:", error)
+        console.error("Error fetching HTML from link:", error instanceof Error ? error.message : "Unknown error")
         return { success: false, error: "Failed to get content from link" }
     }
 }
