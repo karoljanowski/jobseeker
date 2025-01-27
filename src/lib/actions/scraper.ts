@@ -39,6 +39,9 @@ export const getHTMLFromLink = async (link: string) => {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
             }
         })
+        console.log("Response Status:", response.status)
+        console.log("Response Headers:", response.headers)
+
         if (!response.ok) {
             console.error("Failed to fetch content from link:", response)
             return { success: false, error: "Failed to get content from link" }
