@@ -1,5 +1,5 @@
 'use client'
-import { OfferWithNotes } from "@/lib/types/offer"
+import { OfferWithNotesFiles } from "@/lib/types/offer"
 import OfferStatus from "./OfferStatus"
 import { startTransition, useActionState, useEffect, useState } from "react"
 import toast from "react-hot-toast"
@@ -11,7 +11,7 @@ import { useSearchParams } from "next/navigation"
 const statuses = ['SAVED', 'SENT', 'INTERVIEW', 'FINISHED'] as const
 const finishedStatuses = ['NOT_FINISHED', 'NO_RESPONSE', 'HR_REJECTED', 'TECHNICAL_REJECTED', 'HOME_ASSIGNMENT_REJECTED', 'FINAL_REJECTED', 'OFFER_DECLINED', 'OFFER_ACCEPTED'] as const
 
-const OfferStatuses = ({ offer }: { offer: OfferWithNotes }) => {
+const OfferStatuses = ({ offer }: { offer: OfferWithNotesFiles }) => {
     const searchParams = useSearchParams()
     const finishedDialog = searchParams?.get('finishedDialog')
     const [isFinishedDialogOpen, setIsFinishedDialogOpen] = useState(finishedDialog === 'true')

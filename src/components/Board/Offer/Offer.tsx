@@ -1,5 +1,5 @@
 import Notes from './Notes'
-import { OfferWithNotes } from '@/lib/types/offer'
+import { OfferWithNotesFiles } from '@/lib/types/offer'
 import OfferItem from './OfferItem'
 import OfferStatuses from './OfferStatuses/OfferStatuses'
 import ResumeItem from './ResumeItem'
@@ -12,7 +12,7 @@ import ColorPicker from './ColorPicker'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import MediaQuery from 'react-responsive'
 
-const Offer = ({ offer }: { offer: OfferWithNotes }) => {
+const Offer = ({ offer }: { offer: OfferWithNotesFiles }) => {
     return (
         <>
             <MediaQuery minWidth={1200}>
@@ -41,7 +41,7 @@ const Offer = ({ offer }: { offer: OfferWithNotes }) => {
     )
 }
 
-const MainInfo = ({ offer }: { offer: OfferWithNotes }) => {
+const MainInfo = ({ offer }: { offer: OfferWithNotesFiles }) => {
     const { id, company, position, description, requirements, notes } = offer
     return (
         <div className='flex flex-col gap-4'>
@@ -56,7 +56,7 @@ const MainInfo = ({ offer }: { offer: OfferWithNotes }) => {
     )
 }
 
-const ColumnInfo = ({ offer }: { offer: OfferWithNotes }) => {
+const ColumnInfo = ({ offer }: { offer: OfferWithNotesFiles }) => {
     const { source, expiresAt, dateAdded, file, tags, location } = offer
     return (
         <div className='flex flex-col gap-2'>

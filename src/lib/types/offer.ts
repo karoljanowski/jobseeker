@@ -21,7 +21,7 @@ export type DeleteOfferFormType = {
     error: string | null
 }
 
-export type OfferWithNotes = Offer & {
+export type OfferWithNotesFiles = Offer & {
     notes: Note[]
     file: File | null
 }

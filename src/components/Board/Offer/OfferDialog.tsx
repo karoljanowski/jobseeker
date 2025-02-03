@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { getOffer } from '@/lib/actions/singleOffer'
 import Offer from './Offer'
 import { Loader2 } from 'lucide-react'
-import { OfferWithNotes } from '@/lib/types/offer'
+import { OfferWithNotesFiles } from '@/lib/types/offer'
 
 const OfferDialog = () => {
     const [open, setOpen] = useState(false)
@@ -14,7 +14,7 @@ const OfferDialog = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
     const offerId = searchParams?.get('offer')
-    const [offer, setOffer] = useState<OfferWithNotes | null>(null)
+    const [offer, setOffer] = useState<OfferWithNotesFiles | null>(null)
 
     const getData = useCallback(async () => {
         setLoading(true)
