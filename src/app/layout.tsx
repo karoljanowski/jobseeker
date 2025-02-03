@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Toast from "@/components/Toast";
+import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 
 const geistSans = localFont({
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         {children}
         <Toast />
+        <Analytics />
       </body>
     </html>
   );
