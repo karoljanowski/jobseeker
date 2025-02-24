@@ -1,10 +1,8 @@
 "use server"
 
 import { openai } from "@/lib/openai"
-import { load } from "cheerio"
 import { ScraperResponse } from "@/lib/types/scraper"
 import { prisma } from "../prisma"
-import axios from 'axios'
 
 export const setLastGptUsage = async (userId: number) => {
     await prisma.user.update({
@@ -33,34 +31,9 @@ export const getLastGptUsage = async (userId: number) => {
     }
 }
 
-export const getHTMLFromLink = async (link: string) => {
-    try {
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(link)}`;
-        const response = await axios.get(proxyUrl);
-
-        if (response.status === 403) {
-            return { success: false, error: "We don't have access to this website" };
-        }
-
-        if (response.status !== 200) {
-            return { success: false, error: "Failed to get content from link" };
-        }
-
-        const $ = load(response.data.contents);
-
-        $('script, style, iframe, form, header, footer, head, nav, aside, button, input, select, a, img, video, audio').remove();
-
-        const cleanHTML = $.html();
-
-        return { success: true, data: cleanHTML };
-    } catch {
-        return { success: false, error: "Failed to get content from link" };
-    }
-}
-
-export const scrapOfferData = async (html: string, userId: number): Promise<ScraperResponse> => {
-    if (!html) {
-        return { success: false, error: "Failed to get content from link" }
+export const scrapOfferData = async (link: string, userId: number): Promise<ScraperResponse> => {
+    if (!link) {
+        return { success: false, error: "No link provided" }
     }
 
     try {
@@ -72,7 +45,7 @@ export const scrapOfferData = async (html: string, userId: number): Promise<Scra
                     "content": [
                         {
                             "type": "text",
-                            "text": "Extract relevant data from provided HTML content. Structure your response in JSON format. If HTML is not an offer, return an empty object."
+                            "text": "You are a job offer data extractor. Visit the provided URL and extract relevant data from the job posting. Structure your response in JSON format. If the URL is not a job offer, return an empty object."
                         }
                     ]
                 },
@@ -81,7 +54,7 @@ export const scrapOfferData = async (html: string, userId: number): Promise<Scra
                     "content": [
                         {
                             "type": "text",
-                            "text": html
+                            "text": `Please visit this URL and extract job offer details: ${link}`
                         }
                     ]
                 }
@@ -137,6 +110,7 @@ export const scrapOfferData = async (html: string, userId: number): Promise<Scra
             frequency_penalty: 0,
             presence_penalty: 0
           });
+          
           if(!response.choices[0].message.content) {
             return { success: false, error: "Failed to get offer data" }
           }
@@ -146,6 +120,4 @@ export const scrapOfferData = async (html: string, userId: number): Promise<Scra
     } catch {
         return { success: false, error: "Error scraping offer data" }
     }
-
-
 }

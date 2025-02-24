@@ -9,10 +9,10 @@ import { Dispatch } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { OfferFrom } from "@/lib/types/offer";
-import { getHTMLFromLink, getLastGptUsage, scrapOfferData } from "@/lib/actions/scraper";
+import { getLastGptUsage, scrapOfferData } from "@/lib/actions/scraper";
 import { getUserId } from "@/lib/auth/authActions";
 
-type LoadingState = 'false' | 'first' | 'second'
+type LoadingState = 'false' | 'loading'
 
 const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>}) => {
     const [link, setLink] = useState('')
@@ -20,7 +20,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
     const [loading, setLoading] = useState<LoadingState>('false')
 
     const handleGetFromLink = async () => {
-        setLoading('first');
+        setLoading('loading');
 
         const userId = await getUserId()
         if (!userId) {
@@ -28,7 +28,6 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
             setLoading('false')
             return
         }
-
 
         const lastGptUsage = await getLastGptUsage(userId)
         if (lastGptUsage?.success && lastGptUsage.lastGptUsage && 
@@ -38,15 +37,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
             return
         }
     
-        const htmlContent = await getHTMLFromLink(link);
-        if (!htmlContent?.success || !htmlContent.data) {
-            toast.error(htmlContent?.error);
-            setLoading('false'); 
-            return;
-        }
-    
-        setLoading('second');
-        const linkData = await scrapOfferData(htmlContent.data, userId);
+        const linkData = await scrapOfferData(link, userId);
         if (!linkData?.success) {
             toast.error(linkData?.error);
             setLoading('false'); 
@@ -74,18 +65,16 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
             <Dialog open={opened} onOpenChange={setOpened}>
                 <DialogTrigger asChild>
                     <Button disabled={loading !== 'false'} variant='default'>Get offer details from link with AI <SearchIcon className='w-4 h-4' /></Button>
-            </DialogTrigger>
-            <DialogContent className='bg-gray-950 border-gray-900'>
-                <DialogHeader>
-                    <DialogTitle>Get offer details from link with AI</DialogTitle>
-                </DialogHeader>
-                <Input type='url' name='get-from-link' onChange={(e) => setLink(e.target.value)} className='bg-gray-950 border-gray-900' placeholder='for example: https://www.google.com' />
-                <Button disabled={loading !== 'false'} variant='secondary' onClick={handleGetFromLink}>
-                    {loading === 'first' 
-                        ? <><Loader2 className='w-5 h-5 animate-spin'/> Getting page content</>
-                        : loading === 'second' 
-                        ? <><Loader2 className='w-5 h-4 animate-spin'/> Getting offer details</>
-                        : 'Get offer details'}
+                </DialogTrigger>
+                <DialogContent className='bg-gray-950 border-gray-900'>
+                    <DialogHeader>
+                        <DialogTitle>Get offer details from link with AI</DialogTitle>
+                    </DialogHeader>
+                    <Input type='url' name='get-from-link' onChange={(e) => setLink(e.target.value)} className='bg-gray-950 border-gray-900' placeholder='for example: https://www.google.com' />
+                    <Button disabled={loading !== 'false'} variant='secondary' onClick={handleGetFromLink}>
+                        {loading === 'loading' 
+                            ? <><Loader2 className='w-5 h-5 animate-spin'/> Getting offer details</>
+                            : 'Get offer details'}
                     </Button>
                 </DialogContent>
             </Dialog>
