@@ -32,8 +32,8 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
 
         const lastGptUsage = await getLastGptUsage(userId)
         if (lastGptUsage?.success && lastGptUsage.lastGptUsage && 
-            new Date(lastGptUsage.lastGptUsage).getTime() + 180000 > new Date().getTime()) {
-            toast.error('Wait 3 minutes before using the AI again.')
+            new Date().getTime() - new Date(lastGptUsage.lastGptUsage).getTime() < 30000) {
+            toast.error('Wait 30 seconds before using the AI again.')
             setLoading('false')
             return
         }
