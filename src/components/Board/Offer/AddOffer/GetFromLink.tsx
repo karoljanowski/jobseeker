@@ -12,7 +12,7 @@ import { OfferFrom } from "@/lib/types/offer";
 import { getLastGptUsage, scrapOfferData } from "@/lib/actions/scraper";
 import { getUserId } from "@/lib/auth/authActions";
 
-type LoadingState = 'false' | 'loading'
+type LoadingState = 'false' | 'html' | 'gpt' | 'start'
 
 const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>}) => {
     const [link, setLink] = useState('')
@@ -20,7 +20,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
     const [loading, setLoading] = useState<LoadingState>('false')
 
     const handleGetFromLink = async () => {
-        setLoading('loading');
+        setLoading('start');
 
         const userId = await getUserId()
         if (!userId) {
@@ -36,7 +36,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
             setLoading('false')
             return
         }
-
+        setLoading('html')
         const response = await fetch(`/api/scraper`, {
             method: 'POST',
             body: JSON.stringify({ link })
@@ -49,6 +49,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
         }
 
         const htmlContent = await response.json();
+        setLoading('gpt')
         const linkData = await scrapOfferData(htmlContent.html, userId);
         if (!linkData?.success) {
             toast.error(linkData?.error);
@@ -84,9 +85,13 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
                     </DialogHeader>
                     <Input type='url' name='get-from-link' onChange={(e) => setLink(e.target.value)} className='bg-gray-950 border-gray-900' placeholder='for example: https://www.google.com' />
                     <Button disabled={loading !== 'false'} variant='secondary' onClick={handleGetFromLink}>
-                        {loading === 'loading' 
-                            ? <><Loader2 className='w-5 h-5 animate-spin'/> Getting offer details</>
-                            : 'Get offer details'}
+                        {loading === 'html' 
+                            ? <><Loader2 className='w-5 h-5 animate-spin'/> Getting HTML</>
+                            : loading === 'gpt'
+                                ? <><Loader2 className='w-5 h-5 animate-spin'/> Getting offer details</>
+                                : loading === 'start'
+                                    ? 'Getting some data...'
+                                    : ''}
                     </Button>
                 </DialogContent>
             </Dialog>

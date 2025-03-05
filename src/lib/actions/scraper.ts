@@ -40,7 +40,7 @@ export const scrapOfferData = async (htmlContent: string, userId: number): Promi
 
         // Use GPT to extract information from the fetched HTML content
         const gptResponse = await openai.chat.completions.create({
-            model: "gpt-4o",
+            model: "gpt-4o-mini",
             messages: [
                 {
                     "role": "system",
