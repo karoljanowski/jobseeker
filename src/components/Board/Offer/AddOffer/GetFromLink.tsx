@@ -9,7 +9,7 @@ import { Dispatch } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { OfferFrom } from "@/lib/types/offer";
-import { getLastGptUsage, scrapOfferData } from "@/lib/actions/scraper";
+import { getLastGptUsage } from "@/lib/actions/scraper";
 import { getUserId } from "@/lib/auth/authActions";
 
 type LoadingState = 'false' | 'html' | 'gpt' | 'start'
