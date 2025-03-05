@@ -46,48 +46,22 @@ const isValidUrl = (url: string) => {
 const optimizeHtml = (html: string) => {
     const $ = cheerio.load(html);
     
-    // Try to find the main content
-    const mainElement = $('main, article, .job-description, .job-details, #job-description, .description');
-    
-    let result = '';
-    
-    if (mainElement.length > 0) {
-        // If we found a main content element, use that as our base
-        const mainHtml = cheerio.load(mainElement.html() || '');
-        
-        // Clean up the main content
-        mainHtml('script').remove();
-        mainHtml('style').remove();
-        mainHtml('iframe').remove();
-        mainHtml('video').remove();
-        mainHtml('audio').remove();
-        mainHtml('svg').remove();
-        
-        result = mainHtml.html() || '';
-    } else {
-        // If no main content found, clean up the entire document
-        $('script').remove();
-        $('style').remove();
-        $('header').remove();
-        $('footer').remove();
-        $('aside').remove();
-        $('nav').remove();
-        $('form').remove();
-        $('input').remove();
-        $('button').remove();
-        $('select').remove();
-        $('textarea').remove();
-        $('img').remove();
-        $('iframe').remove();
-        $('video').remove();
-        $('audio').remove();
-        $('svg').remove();
-        
-        result = $.html();
-    }
-    
-    
-    return result;
+    $('head').remove();
+    $('header').remove();
+    $('footer').remove();
+    $('link').remove();
+    $('script').remove();
+    $('style').remove();
+    $('aside').remove();
+    $('nav').remove();
+    $('form').remove();
+    $('input').remove();
+    $('button').remove();
+    $('select').remove();
+    $('audio').remove();
+    $('svg').remove();
+    $('img').remove();
+    return $.html();
 }
 
 export { POST };
