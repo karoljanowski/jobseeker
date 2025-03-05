@@ -37,20 +37,61 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
     }
 
     try {
-        // Fetch the content from the URL
+        // Fetch the content from the URL with a shorter timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+        
+        console.log(`Attempting to fetch: ${link}`);
+        
         const response = await fetch(link, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-            }
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Cache-Control': 'no-cache'
+            },
+            signal: controller.signal,
+            redirect: 'follow',
+            cache: 'no-store',
+            next: { revalidate: 0 }
         });
+        
+        clearTimeout(timeoutId);
+        
+        console.log(`Fetch response status: ${response.status}`);
 
         if (!response.ok) {
-            return { success: false, error: `Failed to fetch the URL: ${response.statusText}` }
+            return { success: false, error: `Failed to fetch the URL: ${response.status} ${response.statusText}` }
         }
 
-        const htmlContent = await response.text();
+        // Get only a portion of the HTML to avoid processing too much data
+        let htmlContent = await response.text();
+        console.log(`Fetched HTML length: ${htmlContent.length}`);
+        
+        // Trim the HTML to a reasonable size
+        const maxHtmlLength = 40000; // Reduce size to avoid timeouts
+        if (htmlContent.length > maxHtmlLength) {
+            // Try to find the main content area
+            const bodyStartIndex = htmlContent.indexOf('<body');
+            const bodyEndIndex = htmlContent.lastIndexOf('</body>');
+            
+            if (bodyStartIndex !== -1 && bodyEndIndex !== -1) {
+                htmlContent = htmlContent.substring(bodyStartIndex, bodyEndIndex + 7);
+            } else {
+                htmlContent = htmlContent.substring(0, maxHtmlLength);
+            }
+            
+            console.log(`Trimmed HTML to length: ${htmlContent.length}`);
+        }
+        
+        if (!htmlContent || htmlContent.length < 100) {
+            return { success: false, error: "Retrieved HTML content is too small or empty" }
+        }
 
-        // Use GPT to extract information from the fetched HTML content
+        // Use a more focused prompt with a smaller content size
+        console.log('Sending request to GPT');
+        const startTime = Date.now();
+        
         const gptResponse = await openai.chat.completions.create({
             model: "gpt-4o",
             messages: [
@@ -59,7 +100,7 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
                     "content": [
                         {
                             "type": "text",
-                            "text": "You are a job offer data extractor. Extract all relevant data from the job posting HTML content provided, including the job title, company name, location, description, requirements. Return the information in structured JSON format, preserving the exact wording from the original job posting without any paraphrasing or summarization. If the content is not a job offer or if the job posting cannot be parsed, return an empty object {}."
+                            "text": "You are a job offer data extractor. Extract only the following information from the HTML content:\n1. Company name\n2. Job position/title\n3. Location\n4. Expiration date (if available)\n5. Job requirements\n6. Job description\n\nExtract only what you can find in the HTML. Do not make up or infer missing information. Use empty strings for fields you cannot find."
                         }
                     ]
                 },
@@ -68,7 +109,7 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
                     "content": [
                         {
                             "type": "text",
-                            "text": `Extract job offer details from this HTML content: ${htmlContent.substring(0, 100000)}`
+                            "text": `Extract job offer details from this HTML: ${htmlContent}`
                         }
                     ]
                 }
@@ -95,15 +136,15 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
                         },
                         "expiresAt": {
                             "type": "string",
-                            "description": "The date when the job offer expires, in ISO format."
+                            "description": "The date when the job offer expires, in ISO format. Use empty string if not found."
                         },
                         "requirements": {
                             "type": "string",
-                            "description": "The requirements for the job in HTML format, on website it could be a list of requirements or a single requirement. Return the requirements in HTML format."
+                            "description": "The requirements for the job in HTML format. Use empty string if not found."
                         },
                         "description": {
                             "type": "string",
-                            "description": "The job description in HTML format."
+                            "description": "The job description in HTML format. Use empty string if not found."
                         }
                     },
                     "required": [
@@ -118,21 +159,48 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
                 }
               }
             },
-            temperature: 0.5,
+            temperature: 0.2,
             max_completion_tokens: 1000,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0
+            top_p: 1
           });
+          
+          const endTime = Date.now();
+          console.log(`GPT processing time: ${endTime - startTime}ms`);
           
           if(!gptResponse.choices[0].message.content) {
             return { success: false, error: "Failed to get offer data" }
           }
-          const data = JSON.parse(gptResponse.choices[0].message.content)
-          await setLastGptUsage(userId)
-          return { success: true, data }
-    } catch (error) {
+          
+          try {
+            const data = JSON.parse(gptResponse.choices[0].message.content);
+            
+            // Validate that we have at least some basic data
+            if (!data.company && !data.position) {
+              return { success: false, error: "Could not extract meaningful job data from the page" }
+            }
+            
+            await setLastGptUsage(userId);
+            return { success: true, data };
+          } catch (parseError) {
+            console.error("Error parsing GPT response:", parseError, gptResponse.choices[0].message.content);
+            return { success: false, error: "Error parsing job data" }
+          }
+    } catch (error: any) {
         console.error("Error scraping offer data:", error);
-        return { success: false, error: "Error scraping offer data" }
+        
+        // Provide more specific error messages
+        if (error.name === 'AbortError') {
+            return { success: false, error: "Request timed out while fetching the job posting" }
+        }
+        
+        if (error.message && error.message.includes('CORS')) {
+            return { success: false, error: "CORS policy prevented accessing the job posting" }
+        }
+        
+        if (error.message && error.message.includes('timeout')) {
+            return { success: false, error: "Operation timed out - the job posting may be too large to process" }
+        }
+        
+        return { success: false, error: `Error scraping offer data: ${error.message || 'Unknown error'}` }
     }
 }
