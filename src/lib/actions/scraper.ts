@@ -3,6 +3,7 @@
 import { openai } from "@/lib/openai"
 import { ScraperResponse } from "@/lib/types/scraper"
 import { prisma } from "../prisma"
+import puppeteer from 'puppeteer'
 
 export const setLastGptUsage = async (userId: number) => {
     await prisma.user.update({
@@ -37,173 +38,181 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
     }
 
     try {
-        // Fetch the content from the URL with a shorter timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
-        
-        console.log(`Attempting to fetch: ${link}`);
-        
-        const response = await fetch(link, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.5',
-                'Cache-Control': 'no-cache'
-            },
-            signal: controller.signal,
-            redirect: 'follow',
-            cache: 'no-store',
-            next: { revalidate: 0 }
+        // Launch a headless browser
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
         });
         
-        clearTimeout(timeoutId);
-        
-        console.log(`Fetch response status: ${response.status}`);
-
-        if (!response.ok) {
-            return { success: false, error: `Failed to fetch the URL: ${response.status} ${response.statusText}` }
-        }
-
-        // Get only a portion of the HTML to avoid processing too much data
-        let htmlContent = await response.text();
-        console.log(`Fetched HTML length: ${htmlContent.length}`);
-        
-        // Trim the HTML to a reasonable size
-        const maxHtmlLength = 40000; // Reduce size to avoid timeouts
-        if (htmlContent.length > maxHtmlLength) {
-            // Try to find the main content area
-            const bodyStartIndex = htmlContent.indexOf('<body');
-            const bodyEndIndex = htmlContent.lastIndexOf('</body>');
+        try {
+            // Create a new page
+            const page = await browser.newPage();
             
-            if (bodyStartIndex !== -1 && bodyEndIndex !== -1) {
-                htmlContent = htmlContent.substring(bodyStartIndex, bodyEndIndex + 7);
-            } else {
-                htmlContent = htmlContent.substring(0, maxHtmlLength);
+            // Set viewport size
+            await page.setViewport({ width: 1280, height: 800 });
+            
+            // Set user agent
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
+            
+            // Navigate to the URL with a timeout
+            await page.goto(link, { 
+                waitUntil: 'networkidle2',
+                timeout: 30000
+            });
+            
+            // Wait for the content to load (using setTimeout instead of waitForTimeout)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Get the page content
+            const content = await page.content();
+            
+            console.log(`Successfully fetched page content, length: ${content.length}`);
+            
+            // Extract main content to reduce size
+            let mainContent = content;
+            
+            // Try to extract just the main content area if the page is too large
+            if (content.length > 100000) {
+                // Try to find and extract the main content area
+                const mainContentElement = await page.evaluate(() => {
+                    // Common selectors for main content
+                    const selectors = [
+                        'main',
+                        'article',
+                        '.job-description',
+                        '.job-details',
+                        '#job-description',
+                        '.job-content',
+                        '.job-offer',
+                        '.offer-details'
+                    ];
+                    
+                    for (const selector of selectors) {
+                        const element = document.querySelector(selector);
+                        if (element) {
+                            return element.outerHTML;
+                        }
+                    }
+                    
+                    // If no specific content area found, return the body content
+                    return document.body.outerHTML;
+                });
+                
+                if (mainContentElement) {
+                    mainContent = mainContentElement;
+                }
             }
             
-            console.log(`Trimmed HTML to length: ${htmlContent.length}`);
-        }
-        
-        if (!htmlContent || htmlContent.length < 100) {
-            return { success: false, error: "Retrieved HTML content is too small or empty" }
-        }
-
-        // Use a more focused prompt with a smaller content size
-        console.log('Sending request to GPT');
-        const startTime = Date.now();
-        
-        const gptResponse = await openai.chat.completions.create({
-            model: "gpt-4o",
-            messages: [
-                {
-                    "role": "system",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": "You are a job offer data extractor. Extract only the following information from the HTML content:\n1. Company name\n2. Job position/title\n3. Location\n4. Expiration date (if available)\n5. Job requirements\n6. Job description\n\nExtract only what you can find in the HTML. Do not make up or infer missing information. Use empty strings for fields you cannot find."
-                        }
-                    ]
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": `Extract job offer details from this HTML: ${htmlContent}`
-                        }
-                    ]
-                }
-            ],
-            response_format: {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "job_offer",
-                    "strict": true,
-                    "schema": {
-                        "type": "object",
-                        "properties": {
-                        "company": {
-                            "type": "string",
-                            "description": "The name of the company offering the job."
-                        },
-                        "position": {
-                            "type": "string",
-                            "description": "The title or position of the job."
-                        },
-                        "location": {
-                            "type": "string",
-                            "description": "The city or if it is remote."
-                        },
-                        "expiresAt": {
-                            "type": "string",
-                            "description": "The date when the job offer expires, in ISO format. Use empty string if not found."
-                        },
-                        "requirements": {
-                            "type": "string",
-                            "description": "The requirements for the job in HTML format. Use empty string if not found."
-                        },
-                        "description": {
-                            "type": "string",
-                            "description": "The job description in HTML format. Use empty string if not found."
-                        }
+            // Trim content if still too large
+            const maxContentLength = 50000;
+            if (mainContent.length > maxContentLength) {
+                mainContent = mainContent.substring(0, maxContentLength);
+            }
+            
+            // Close the browser
+            await browser.close();
+            
+            // Use GPT to extract information from the fetched content
+            const gptResponse = await openai.chat.completions.create({
+                model: "gpt-4o-mini",
+                messages: [
+                    {
+                        "role": "system",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "You are a job offer data extractor. Extract the following information from the HTML content provided:\n1. Company name\n2. Job position/title\n3. Location (city or remote status)\n4. Expiration date (if available)\n5. Job requirements\n6. Job description\n\nExtract this information directly from the HTML content without making assumptions or adding information that isn't present. If you can't find certain information, use empty strings for those fields. If the content is not a job posting or cannot be parsed properly, return an empty object {}."
+                            }
+                        ]
                     },
-                    "required": [
-                        "company",
-                        "position",
-                        "location",
-                        "expiresAt",
-                        "requirements",
-                        "description"
-                    ],
-                    "additionalProperties": false
-                }
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": `Extract job offer details from this HTML content: ${mainContent}`
+                            }
+                        ]
+                    }
+                ],
+                response_format: {
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": "job_offer",
+                        "strict": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                            "company": {
+                                "type": "string",
+                                "description": "The name of the company offering the job."
+                            },
+                            "position": {
+                                "type": "string",
+                                "description": "The title or position of the job."
+                            },
+                            "location": {
+                                "type": "string",
+                                "description": "The city or if it is remote."
+                            },
+                            "expiresAt": {
+                                "type": "string",
+                                "description": "The date when the job offer expires, in ISO format. Use empty string if not found."
+                            },
+                            "requirements": {
+                                "type": "string",
+                                "description": "The requirements for the job in HTML format. Use empty string if not found."
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "The job description in HTML format. Use empty string if not found."
+                            }
+                        },
+                        "required": [
+                            "company",
+                            "position",
+                            "location",
+                            "expiresAt",
+                            "requirements",
+                            "description"
+                        ],
+                        "additionalProperties": false
+                    }
+                  }
+                },
+                temperature: 0.2,
+                max_completion_tokens: 1000,
+                top_p: 1
+              });
+              
+              if(!gptResponse.choices[0].message.content) {
+                return { success: false, error: "Failed to get offer data" }
               }
-            },
-            temperature: 0.2,
-            max_completion_tokens: 1000,
-            top_p: 1
-          });
-          
-          const endTime = Date.now();
-          console.log(`GPT processing time: ${endTime - startTime}ms`);
-          
-          if(!gptResponse.choices[0].message.content) {
-            return { success: false, error: "Failed to get offer data" }
-          }
-          
-          try {
-            const data = JSON.parse(gptResponse.choices[0].message.content);
-            
-            // Validate that we have at least some basic data
-            if (!data.company && !data.position) {
-              return { success: false, error: "Could not extract meaningful job data from the page" }
+              
+              try {
+                const data = JSON.parse(gptResponse.choices[0].message.content);
+                
+                // Validate that we have at least some basic data
+                if (!data.company && !data.position) {
+                  return { success: false, error: "Could not extract meaningful job data from the page" }
+                }
+                
+                await setLastGptUsage(userId);
+                return { success: true, data };
+              } catch (parseError) {
+                console.error("Error parsing GPT response:", parseError, gptResponse.choices[0].message.content);
+                return { success: false, error: "Error parsing job data" }
+              }
+        } finally {
+            // Ensure browser is closed even if an error occurs
+            if (browser) {
+                await browser.close();
+                console.log('Browser closed');
             }
-            
-            await setLastGptUsage(userId);
-            return { success: true, data };
-          } catch (parseError) {
-            console.error("Error parsing GPT response:", parseError, gptResponse.choices[0].message.content);
-            return { success: false, error: "Error parsing job data" }
-          }
+        }
     } catch (error: unknown) {
         console.error("Error scraping offer data:", error);
         
-        // Type guard for Error objects
-        const err = error as Error;
-        
-        // Provide more specific error messages
-        if (err.name === 'AbortError') {
-            return { success: false, error: "Request timed out while fetching the job posting" }
-        }
-        
-        if (err.message && err.message.includes('CORS')) {
-            return { success: false, error: "CORS policy prevented accessing the job posting" }
-        }
-        
-        if (err.message && err.message.includes('timeout')) {
-            return { success: false, error: "Operation timed out - the job posting may be too large to process" }
-        }
-        
-        return { success: false, error: `Error scraping offer data: ${err.message || 'Unknown error'}` }
+        return { success: false, error: `Error scraping offer data: ${error}` }
     }
 }
