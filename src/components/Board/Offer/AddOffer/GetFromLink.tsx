@@ -36,8 +36,20 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
             setLoading('false')
             return
         }
-    
-        const linkData = await scrapOfferData(link, userId);
+
+        const response = await fetch(`/api/scraper`, {
+            method: 'POST',
+            body: JSON.stringify({ link })
+        })
+        
+        if (!response.ok) {
+            toast.error(response.statusText);
+            setLoading('false'); 
+            return;
+        }
+
+        const htmlContent = await response.json();
+        const linkData = await scrapOfferData(htmlContent.html, userId);
         if (!linkData?.success) {
             toast.error(linkData?.error);
             setLoading('false'); 
