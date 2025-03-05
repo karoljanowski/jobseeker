@@ -185,22 +185,25 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
             console.error("Error parsing GPT response:", parseError, gptResponse.choices[0].message.content);
             return { success: false, error: "Error parsing job data" }
           }
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Error scraping offer data:", error);
         
+        // Type guard for Error objects
+        const err = error as Error;
+        
         // Provide more specific error messages
-        if (error.name === 'AbortError') {
+        if (err.name === 'AbortError') {
             return { success: false, error: "Request timed out while fetching the job posting" }
         }
         
-        if (error.message && error.message.includes('CORS')) {
+        if (err.message && err.message.includes('CORS')) {
             return { success: false, error: "CORS policy prevented accessing the job posting" }
         }
         
-        if (error.message && error.message.includes('timeout')) {
+        if (err.message && err.message.includes('timeout')) {
             return { success: false, error: "Operation timed out - the job posting may be too large to process" }
         }
         
-        return { success: false, error: `Error scraping offer data: ${error.message || 'Unknown error'}` }
+        return { success: false, error: `Error scraping offer data: ${err.message || 'Unknown error'}` }
     }
 }
