@@ -36,37 +36,44 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
             setLoading('false')
             return
         }
+        // html
         setLoading('html')
         const response = await fetch(`/api/scraper`, {
             method: 'POST',
             body: JSON.stringify({ link })
         })
-        
+
         if (!response.ok) {
             toast.error(response.statusText);
             setLoading('false'); 
             return;
         }
-
         const htmlContent = await response.json();
-        console.log(htmlContent)
+
+        // gpt
         setLoading('gpt')
-        const linkData = await scrapOfferData(htmlContent.html, userId);
-        if (!linkData?.success) {
-            toast.error(linkData?.error);
+        const gptResponse = await fetch(`/api/ai`, {
+            method: 'POST',
+            body: JSON.stringify({ prompt: htmlContent.html, userId })
+        })
+
+        if (!gptResponse.ok) {
+            toast.error(gptResponse.statusText);
             setLoading('false'); 
             return;
         }
+
+        const gptData = await gptResponse.json();
     
-        if (linkData?.success && linkData.data) {
+        if (gptData?.success && gptData.data) {
             setForm((prevForm) => ({
                 ...prevForm,
-                company: linkData.data?.company || prevForm.company,
-                position: linkData.data?.position || prevForm.position,
-                location: linkData.data?.location || prevForm.location,
+                company: gptData.data?.company || prevForm.company,
+                position: gptData.data?.position || prevForm.position,
+                location: gptData.data?.location || prevForm.location,
                 source: link,
-                description: linkData.data?.description || prevForm.description,
-                requirements: linkData.data?.requirements || prevForm.requirements,
+                description: gptData.data?.description || prevForm.description,
+                requirements: gptData.data?.requirements || prevForm.requirements,
             }));
             setLoading('false');
             setOpened(false);

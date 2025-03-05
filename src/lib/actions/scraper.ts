@@ -4,8 +4,6 @@ import { openai } from "@/lib/openai"
 import { ScraperResponse } from "@/lib/types/scraper"
 import { prisma } from "../prisma"
 
-export const maxDuration = 60;
-
 export const setLastGptUsage = async (userId: number) => {
     await prisma.user.update({
         where: {
