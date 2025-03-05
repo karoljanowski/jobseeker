@@ -49,6 +49,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
         }
 
         const htmlContent = await response.json();
+        console.log(htmlContent)
         setLoading('gpt')
         const linkData = await scrapOfferData(htmlContent.html, userId);
         if (!linkData?.success) {
@@ -91,7 +92,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
                                 ? <><Loader2 className='w-5 h-5 animate-spin'/> Getting offer details</>
                                 : loading === 'start'
                                     ? 'Getting some data...'
-                                    : ''}
+                                    : 'Get offer details'}
                     </Button>
                 </DialogContent>
             </Dialog>
