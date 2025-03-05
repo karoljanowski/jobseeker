@@ -37,15 +37,29 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
     }
 
     try {
-        const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
+        // Fetch the content from the URL
+        const response = await fetch(link, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        });
+
+        if (!response.ok) {
+            return { success: false, error: `Failed to fetch the URL: ${response.statusText}` }
+        }
+
+        const htmlContent = await response.text();
+
+        // Use GPT to extract information from the fetched HTML content
+        const gptResponse = await openai.chat.completions.create({
+            model: "gpt-4o",
             messages: [
                 {
                     "role": "system",
                     "content": [
                         {
                             "type": "text",
-                            "text": "You are a job offer data extractor. Visit the provided URL and extract relevant data from the job posting. Structure your response in JSON format. If the URL is not a job offer, return an empty object."
+                            "text": "You are a job offer data extractor. Extract all relevant data from the job posting HTML content provided, including the job title, company name, location, description, requirements. Return the information in structured JSON format, preserving the exact wording from the original job posting without any paraphrasing or summarization. If the content is not a job offer or if the job posting cannot be parsed, return an empty object {}."
                         }
                     ]
                 },
@@ -54,7 +68,7 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
                     "content": [
                         {
                             "type": "text",
-                            "text": `Please visit this URL and extract job offer details: ${link}`
+                            "text": `Extract job offer details from this HTML content: ${htmlContent.substring(0, 100000)}`
                         }
                     ]
                 }
@@ -85,7 +99,7 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
                         },
                         "requirements": {
                             "type": "string",
-                            "description": "The requirements for the job in HTML format."
+                            "description": "The requirements for the job in HTML format, on website it could be a list of requirements or a single requirement. Return the requirements in HTML format."
                         },
                         "description": {
                             "type": "string",
@@ -104,20 +118,21 @@ export const scrapOfferData = async (link: string, userId: number): Promise<Scra
                 }
               }
             },
-            temperature: 1,
+            temperature: 0.5,
             max_completion_tokens: 1000,
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0
           });
           
-          if(!response.choices[0].message.content) {
+          if(!gptResponse.choices[0].message.content) {
             return { success: false, error: "Failed to get offer data" }
           }
-          const data = JSON.parse(response.choices[0].message.content)
+          const data = JSON.parse(gptResponse.choices[0].message.content)
           await setLastGptUsage(userId)
           return { success: true, data }
-    } catch {
+    } catch (error) {
+        console.error("Error scraping offer data:", error);
         return { success: false, error: "Error scraping offer data" }
     }
 }
