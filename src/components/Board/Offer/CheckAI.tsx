@@ -1,9 +1,8 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Sparkles, InfoIcon, Loader2 } from "lucide-react"
-import { resumeAnaize } from "@/lib/actions/resumeAnaize"
 import { OfferWithNotes } from "@/lib/types/offer"
-import { startTransition, useActionState, useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 
 const CheckAI = ({ offer }: { offer: OfferWithNotes }) => {
