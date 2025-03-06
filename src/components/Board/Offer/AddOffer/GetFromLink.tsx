@@ -38,7 +38,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
         }
         // html
         setLoading('html')
-        const response = await fetch(`/api/scraper`, {
+        const response = await fetch(`/api/gethtmlcontent`, {
             method: 'POST',
             body: JSON.stringify({ link })
         })
@@ -52,7 +52,7 @@ const GetFromLink = ({setForm} : {setForm: Dispatch<SetStateAction<OfferFrom>>})
 
         // gpt
         setLoading('gpt')
-        const gptResponse = await fetch(`/api/ai`, {
+        const gptResponse = await fetch(`/api/scrapeai`, {
             method: 'POST',
             body: JSON.stringify({ prompt: htmlContent.html, userId })
         })

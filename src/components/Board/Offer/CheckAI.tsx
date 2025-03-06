@@ -8,19 +8,26 @@ import toast from "react-hot-toast"
 
 const CheckAI = ({ offer }: { offer: OfferWithNotes }) => {
     const [open, setOpen] = useState(false)
-    const [state, dispatch, pending] = useActionState(resumeAnaize, {success: false, error: null, response: ''})
+    const [response, setResponse] = useState<string>('')
+    const [loading, setLoading] = useState(true)
 
-    const handleCheck = useCallback(() => {
-        startTransition(() => {
-            dispatch(offer)
+    const handleCheck = useCallback(async () => {
+        setLoading(true)
+        const response = await fetch(`/api/analize`, {
+            method: 'POST',
+            body: JSON.stringify({ offer })
         })
-    }, [dispatch, offer])
 
-    useEffect(() => {
-        if(state.success){
-            toast.success('Resume analyzed')
+        if (!response.ok) {
+            toast.error(response.statusText);
+            setLoading(false)
+            return;
         }
-    }, [state])
+
+        const data = await response.json();
+        setResponse(data.response)
+        setLoading(false)
+    }, [offer])
 
     useEffect(() => {
         if(open){
@@ -30,15 +37,15 @@ const CheckAI = ({ offer }: { offer: OfferWithNotes }) => {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild disabled={true}>
-                <Button disabled={true} variant='default'><Sparkles className="w-4 h-4" />Click to check CV with AI</Button>
+            <DialogTrigger asChild disabled={false}>
+                <Button disabled={false} variant='default'><Sparkles className="w-4 h-4" />Click to check CV with AI</Button>
             </DialogTrigger>
             <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                 <InfoIcon className="w-4 h-4" />
                 <p className="leading-none">This option is unavailable for now.</p>
             </div>
-            <DialogContent className="bg-gray-950 border-gray-900 w-full max-w-[1000px]">
-                {!pending && state.response ? <Response response={state.response} /> : <ResponseLoader />}
+            <DialogContent className="bg-gray-950 border-gray-900 w-full max-w-[1000px] max-h-[80vh] overflow-y-auto">
+                {loading ? <ResponseLoader /> : <Response response={response} />}
             </DialogContent>
         </Dialog>
     )
@@ -46,12 +53,12 @@ const CheckAI = ({ offer }: { offer: OfferWithNotes }) => {
 
 const ResponseLoader = () => {
     return (
-        <div className="flex flex-col gap-2">
-            <p className="text-sm text-gray-500">
-                <Sparkles className="w-4 h-4" /> AI is analyzing your resume...
+        <div className="flex flex-col items-center justify-center gap-8 py-10">
+            <p className="text-white flex items-center gap-2 text-xl font-bold">
+                <Sparkles className="w-6 h-6" /> AI is analyzing your resume...
             </p>
-            <div className="flex items-center justify-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
+            <div className="flex items-center justify-center">
+                <Loader2 className="w-6 h-6 animate-spin" />
             </div>
         </div>
     )
@@ -59,7 +66,8 @@ const ResponseLoader = () => {
 const Response = ({ response }: { response: string }) => {
     return (
         <div className="flex flex-col gap-2">
-            <p className="text-sm text-gray-500">{response}</p>
+            <p className="text-white text-xl font-bold">AI analysis</p>
+            <p className="text-white editor" dangerouslySetInnerHTML={{ __html: response }} />
         </div>
     )
 }
