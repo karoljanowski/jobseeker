@@ -2,6 +2,8 @@
 
 **Jobseeker** is a modern web app designed to help job seekers efficiently manage and track their job applications — from the first saved offer to final responses.
 
+Live: https://seekerapp.xyz/
+
 ![homepage](https://github.com/user-attachments/assets/a68b67aa-57ab-4204-8648-0d3981d7bd4b)
 
 ![dashboard](https://github.com/user-attachments/assets/0395b761-6865-4d71-bd09-708a2b8c5e46)
