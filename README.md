@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jobseeker — Smart Job Application Tracker
 
-## Getting Started
+**Jobseeker** is a modern web app designed to help job seekers efficiently manage and track their job applications — from the first saved offer to final responses.
 
-First, run the development server:
+![homepage](https://github.com/user-attachments/assets/a68b67aa-57ab-4204-8648-0d3981d7bd4b)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![dashboard](https://github.com/user-attachments/assets/0395b761-6865-4d71-bd09-708a2b8c5e46)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![offer](https://github.com/user-attachments/assets/8c7e0950-210d-4f47-863d-401ef9eb8d20)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# ⚙️ Tech Stack
 
-## Learn More
+- **Next.js 15** – App Router, Server Actions
+- **OpenAPI** – for AI integrations
+- **Drag & Drop UI** – Kanban-style board interactions
+- **Tailwind CSS + shadcn/ui** – clean and modern component library
+- **AI-powered Web Scraping** – extract job data from offer URLs
+- **AI CV Matcher** – compare your resume to job requirements
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔑 Key Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### ✅ Kanban-style Job Offer Management
+- Add detailed offers with descriptions, requirements, locations, and tech tags
+- Organize offers into stages: **Saved**, **Sent**, **Interview**, **Finished**
+- Move offers between stages using **drag-and-drop**
 
-## Deploy on Vercel
+### 🔗 Offer Import via URL (AI Scraper)
+- Paste a job offer link (e.g., LinkedIn)
+- Jobseeker will automatically **scrape and structure** the job data using AI
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 📎 Attach Resume and AI Matching
+- Upload your **resume in PDF format**
+- AI compares your resume to job requirements
+- Receive suggestions on how to improve your CV for that specific offer
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 📊 Application Stats and Analytics
+- Track the number of saved, sent, and completed applications
+- See which offers got a response and which didn’t
+- Identify rejection reasons: no response, HR rejection, technical rejection
+
+## 📬 Contact
+
+Have questions or feedback?  
+Feel free to reach out:  
+📧 karol.jj@icloud.com
+
