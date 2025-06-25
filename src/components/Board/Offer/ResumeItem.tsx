@@ -1,19 +1,22 @@
 'use client'
 import ResumeSelect from "./ResumeSelect"
-import { startTransition, useActionState } from "react"
+import { Dispatch, SetStateAction, startTransition, useActionState } from "react"
 import { updateOfferFile } from "@/lib/actions/singleOffer"
 import { File as FileType } from "@prisma/client"
 import { useEffect } from "react"
 import toast from "react-hot-toast"
 import { Button } from "@/components/ui/button"
 import { EyeIcon } from "lucide-react"
+import { OfferWithNotes } from "@/lib/types/offer"
 
 interface ResumeItemProps {
     offerId: number
     selectedFile: FileType | null
+    setOffer: Dispatch<SetStateAction<OfferWithNotes | null>>
+    offer: OfferWithNotes
 }
 
-const ResumeItem = ({ offerId, selectedFile }: ResumeItemProps) => {
+const ResumeItem = ({ offerId, selectedFile, setOffer, offer }: ResumeItemProps) => {
     const [state, dispatch, pending] = useActionState(updateOfferFile, { selectedFile: selectedFile, success: false, error: null })
 
     const handleSelect = (file: FileType) => {
@@ -25,6 +28,7 @@ const ResumeItem = ({ offerId, selectedFile }: ResumeItemProps) => {
     useEffect(() => {
         if (state.success) {
             toast.success('Resume updated')
+            setOffer({ ...offer, file: state.selectedFile })
         } else if (state.error) {
             toast.error('Error updating resume')
         }

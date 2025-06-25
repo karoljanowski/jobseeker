@@ -36,13 +36,9 @@ const CheckAI = ({ offer }: { offer: OfferWithNotes }) => {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild disabled={false}>
-                <Button disabled={false} variant='default'><Sparkles className="w-4 h-4" />Click to check CV with AI</Button>
+            <DialogTrigger asChild>
+                <Button disabled={!offer.file} variant='default'><Sparkles className="w-4 h-4" />Click to check CV with AI</Button>
             </DialogTrigger>
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-                <InfoIcon className="w-4 h-4" />
-                <p className="leading-none">This option is unavailable for now.</p>
-            </div>
             <DialogContent className="bg-gray-950 border-gray-900 w-full max-w-[1000px] max-h-[80vh] overflow-y-auto">
                 {loading ? <ResponseLoader /> : <Response response={response} />}
             </DialogContent>

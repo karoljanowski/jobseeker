@@ -47,7 +47,7 @@ const OfferDialog = () => {
                 </DialogHeader>
                 <div className='flex h-full justify-center w-full'>
                     {
-                        !loading && offer ? <Offer offer={offer} /> : 
+                        !loading && offer ? <Offer offer={offer} setOffer={setOffer} /> : 
                         <div className='flex h-full justify-center items-center'>
                             <Loader2 className='animate-spin w-5 h-5' />
                         </div>
