@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Sparkles, InfoIcon, Loader2 } from "lucide-react"
+import { Sparkles, Loader2 } from "lucide-react"
 import { OfferWithNotes } from "@/lib/types/offer"
 import { useCallback, useEffect, useState } from "react"
 import toast from "react-hot-toast"
